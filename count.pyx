@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import json
-from collections import Counter
 from Bio import SeqIO
 
 
