@@ -4,10 +4,10 @@ from Bio.SeqUtils import GC
 for seq_record in SeqIO.parse("samples/test.fasta", "fasta"):
     print seq_record.id
     cnt = Counter()
-    line = seq_record.seq
-    n = 3
-    for codon in [line[i:i+n] for i in range(0, len(line), n)]:
-      cnt[str(codon)] += 1
+    line = str(seq_record.seq)
+    i = 0
+    for j in range(((len(line))/ 3)):
+      cnt[line[i:i+3]] += 1
+      i += 3
     print cnt
-
 
