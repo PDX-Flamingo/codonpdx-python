@@ -1,26 +1,8 @@
 #!/usr/bin/python
 
 import getopt
-import json
 import sys
-from collections import Counter
-from Bio import SeqIO
-from Bio.SeqUtils import GC
-
-
-def compute(inputfile):
-  for seq_record in SeqIO.parse(inputfile, "fasta"):
-      cnt = Counter()
-      line = str(seq_record.seq)
-      i = 0
-      for j in range(((len(line))/ 3)):
-        cnt[line[i:i+3]] += 1
-        i += 3
-      print json.dumps(
-        [{
-        "id"          : seq_record.id,
-        "ratios"      : cnt
-        }], sort_keys=True, indent=4, separators=(',', ': '))
+import count
 
 def main(argv):
    inputfile = 'samples/test.fasta'
@@ -37,7 +19,7 @@ def main(argv):
          inputfile = arg
    print 'Input file is', inputfile
 
-   compute(inputfile)
+   count.compute(inputfile)
 
 if __name__ == "__main__":
    main(sys.argv[1:])
