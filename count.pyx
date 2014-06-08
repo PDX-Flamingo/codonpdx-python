@@ -4,14 +4,14 @@ import json
 from Bio import SeqIO
 
 
-def compute(inputfile):
+def compute(inputfile, format):
   cdef str line = ''
   cdef int i = 0
   cdef int j = 0
   cdef int line_len = 0
   cdef str token = ''
   cdef int token_cnt = 0
-  for seq_record in SeqIO.parse(inputfile, "fasta"):
+  for seq_record in SeqIO.parse(inputfile, format):
       cnt = {}
       line = str(seq_record.seq)
       line_len = len(line)
