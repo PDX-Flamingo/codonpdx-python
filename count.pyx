@@ -24,8 +24,8 @@ def compute(inputfile, format):
                 cnt[token] = 1
             else:
                 cnt[token] = token_cnt + 1
-            print json.dumps(
-                [{
-                    "id": seq_record.id,
-                    "ratios": cnt
-                }])
+        print json.dumps(
+            [{
+                "id": seq_record.id,
+                "ratios": cnt
+            }])
