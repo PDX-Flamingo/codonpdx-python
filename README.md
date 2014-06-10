@@ -1,6 +1,8 @@
 codonpdx-python
 ===============
 
+[![Build Status](https://travis-ci.org/PDX-Flamingo/codonpdx-python.svg?branch=master)](https://travis-ci.org/PDX-Flamingo/codonpdx-python)
+
 Python version of the codonpdx counter
 
 Setup
