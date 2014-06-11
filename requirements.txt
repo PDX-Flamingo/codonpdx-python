@@ -1,3 +1,2 @@
 biopython
-cython
 pep8

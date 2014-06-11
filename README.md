@@ -12,8 +12,13 @@ Create a virtualenv and then run the following commands.
 
 ```bash
 pip install -r requirements.txt
-python setup.py install
+make
 ```
+
+C dependencies
+-----
+
+1. [C-Algorithms 1.2.0](http://c-algorithms.sourceforge.net)
 
 Usage
 -------
