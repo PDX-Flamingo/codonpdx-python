@@ -9,11 +9,11 @@ includedir=${prefix}/include
 TARGET = counterc
 
 CC = gcc
-CFLAGS  = -shared -Wl,-rpath,${libdir},-soname,$(TARGET).so -I${includedir} -L${libdir} -std=c99 -lcalg -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-rpath,${libdir},-soname,libcalg.so -I${includedir} -L${libdir} -std=c99 -lcalg -O3 -funroll-loops
 
 ifeq ($(UNAME), Darwin)
 CC = gcc
-CFLAGS  = -shared -Wl,-rpath,${libdir},-install_name,$(TARGET).so -I${includedir} -L${libdir} -lcalg -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-rpath,${libdir},-install_name,libcalg.so -I${includedir} -L${libdir} -lcalg -O3 -funroll-loops
 endif
 
 all: $(TARGET)
