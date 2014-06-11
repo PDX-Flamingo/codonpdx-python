@@ -1,11 +1,10 @@
 language: python
-env: LD_LIBRARY_PATH=/home/travis/lib
+env: LD_LIBRARY_PATH=/home/travis/lib/
 python:
   - "2.7"
 # command to install dependencies
 install:
-  - "make -f Makefile.travis install"
-  - "make"
+  - "make -f Makefile.travis install && make"
   - "pip install -r requirements.txt"
   - "wget https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb"
 # command to run tests
