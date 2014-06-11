@@ -3,7 +3,11 @@ python:
   - "2.7"
 # command to install dependencies
 install:
+  - "make -f Makefile.travis install"
+  - "make"
   - "pip install -r requirements.txt"
-  - "python setup.py install"
+  - "wget https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb"
 # command to run tests
-script: "pep8 *.py*"
+script: 
+  - "pep8 *.py*"
+  - "cat NC_005816.gb | python main.py -f genbank"

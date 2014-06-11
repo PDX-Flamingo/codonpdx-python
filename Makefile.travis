@@ -1,0 +1,16 @@
+prefix=${HOME}
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+CC = gcc
+
+TARGET = c-algorithms-1.2.0
+
+install:
+	wget -P $(HOME) http://downloads.sourceforge.net/project/c-algorithms/c-algorithms/1.2.0/c-algorithms-1.2.0.tar.gz
+	tar -xzf $(HOME)/$(TARGET).tar.gz -C $(HOME)
+	rm $(HOME)/$(TARGET).tar.gz
+	cd $(HOME)/$(TARGET)/ && ./configure --prefix=$(HOME) CFLAGS=-O2
+	cd $(HOME)/$(TARGET)/ && make && make check && make install
+	rm -rf $(HOME)/$(TARGET)/
+	cd $(HOME) && find ./lib && find ./include
