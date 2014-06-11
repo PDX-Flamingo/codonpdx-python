@@ -11,7 +11,10 @@ CURRENT_MILLI_TIME = lambda: int(round(time.clock() * 1000))
 
 
 def getdict(struct):
-    return dict((field, getattr(struct, field)) for field, _ in struct._fields_)
+    return dict(
+        (field, getattr(struct, field)) for field, _ in struct._fields_
+        )
+
 
 def main(argv):
     counterc = CDLL('./counterc.so')
