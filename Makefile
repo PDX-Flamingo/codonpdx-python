@@ -9,7 +9,7 @@ includedir=${prefix}/include
 TARGET = counterc
 
 CC = gcc
-CFLAGS  = -shared -Wl,-soname,$(TARGET).so -I${includedir} -L${libdir} -lcalg -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-soname,$(TARGET).so -I${includedir} -L${libdir} -std=c99 -lcalg -O3 -funroll-loops
 
 ifeq ($(UNAME), Darwin)
 CC = gcc
