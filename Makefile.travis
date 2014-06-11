@@ -13,4 +13,4 @@ install:
 	cd $(HOME)/$(TARGET)/ && ./configure --prefix=$(HOME) CFLAGS=-O2
 	cd $(HOME)/$(TARGET)/ && make && make check && make install
 	rm -rf $(HOME)/$(TARGET)/
-	cd $(HOME) && find ./lib && find ./include
+	ls -l && make
