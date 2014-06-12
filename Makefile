@@ -9,17 +9,17 @@ includedir=${prefix}/include
 TARGET = counterc
 
 CC = gcc
-CFLAGS  = -shared -Wl,-rpath,${libdir},-soname,libcalg.so -I${includedir} -L${libdir} -std=c99 -lcalg -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-soname,$(TARGET).so -Wl,--no-undefined -I${includedir} -L${libdir} -std=c99 -O3 -funroll-loops
 
 ifeq ($(UNAME), Darwin)
 CC = gcc
-CFLAGS  = -shared -Wl,-rpath,${libdir},-install_name,libcalg.so -I${includedir} -L${libdir} -lcalg -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-rpath,${libdir},-install_name,$(TARGET).so -I${includedir} -L${libdir} -O3 -funroll-loops
 endif
 
 all: $(TARGET)
 
 $(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET).so -fPIC $(TARGET).c 
+	$(CC) $(CFLAGS) -o $(TARGET).so -fPIC $(TARGET).c -lcalg
 
 clean:
 	$(RM) $(TARGET)
