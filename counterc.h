@@ -1,5 +1,5 @@
 #include <string.h>
-#include <libcalg-1.0/libcalg/trie.h>
+#include "trie_codon.h"
 
 typedef struct CodonCount {
     long long TTT;

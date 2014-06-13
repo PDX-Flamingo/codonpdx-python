@@ -27,16 +27,7 @@ CodonCount countcodons(char * sequence)
 
         if (invalid == 1) { continue; }
 
-        TrieValue currentcount = trie_lookup(codoncount, codon);
-
-        if (currentcount == TRIE_NULL)
-            trie_insert(codoncount, codon, (TrieValue) 1);
-        else
-        {
-            long current = (long) currentcount + 1;
-            currentcount = (TrieValue) current;
-            trie_insert(codoncount, codon, currentcount);
-        }
+        trie_increment(codoncount, codon);
     }
 
     // Prepare struct to return
