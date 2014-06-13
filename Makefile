@@ -13,7 +13,7 @@ CFLAGS  = -shared -Wl,-soname,$(TARGET).so -Wl,--no-undefined -I${includedir} -L
 
 ifeq ($(UNAME), Darwin)
 CC = gcc
-CFLAGS  = -shared -Wl,-rpath,${libdir},-install_name,$(TARGET).so -I${includedir} -L${libdir} -O3 -funroll-loops
+CFLAGS  = -shared -Wl,-install_name,$(TARGET).so -I${includedir} -L${libdir} -O3 -funroll-loops
 endif
 
 all: $(TARGET)
@@ -22,4 +22,4 @@ $(TARGET): $(TARGET).c
 	$(CC) $(CFLAGS) -o $(TARGET).so -fPIC $(TARGET).c -lcalg
 
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(TARGET).so
