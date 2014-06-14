@@ -14,3 +14,4 @@ script:
   - "pep8 *.py*"
   - "cat NC_005816.gb | python main.py -f genbank"
   - "cat cow.seq | python bench.py"
+  
