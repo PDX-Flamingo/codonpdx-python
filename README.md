@@ -30,6 +30,6 @@ python main.py -i cow.rna.fna  > /tmp/output.json
 Results
 --------
 
-| *DataSet* | *Version* | *OS* | *Compiler* | *Python* | *codonpdx* | *Time* | 
-|-----------|-----------|------|------------|----------|----------|--------|
-| refseq  | Release 65 | Centos 6 | GCC 4.9.0 | pypy 2.31 | v1.0.0 |  12.35 seconds |
+| *DataSet* | *Version* | *OS* | *Compiler* | *Python* | *codonpdx* | *Jobs* | *Time* | 
+|-----------|-----------|------|------------|----------|------------|--------|--------|
+| refseq  | Release 65 | CentOS 6 | GCC 4.9.0 | PyPy 2.31 | v1.0.0 | 32 | 12.35 seconds |
