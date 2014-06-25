@@ -18,8 +18,6 @@ make
 
 Dependencies
 -----
-
-* [C-Algorithms 1.2.0](http://c-algorithms.sourceforge.net)
 * [BioPython](http://biopython.org) 
 
 Usage
