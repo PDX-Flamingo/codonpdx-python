@@ -47,7 +47,7 @@ class TestCounterC():
 
     @istest
     def test_simple_sequence_five_each(self):
-        one_each = ("TTTTTCTTATTGTCTTCCTCATCGTATTACTAATAGTGTTGCTGATGGCTTCTCC"
+        five_each = ("TTTTTCTTATTGTCTTCCTCATCGTATTACTAATAGTGTTGCTGATGGCTTCTCC"
                     "TACTGCCTCCCCCACCGCATCACCAACAGCGTCGCCGACGGATTATCATAATGAC"
                     "TACCACAACGAATAACAAAAAGAGTAGCAGAAGGGTTGTCGTAGTGGCTGCCGCA"
                     "GCGGATGACGAAGAGGGTGGCGGAGGGTTTTTCTTATTGTCTTCCTCATCGTATT"
@@ -65,7 +65,7 @@ class TestCounterC():
                     "CTGCCTCCCCCACCGCATCACCAACAGCGTCGCCGACGGATTATCATAATGACTA"
                     "CCACAACGAATAACAAAAAGAGTAGCAGAAGGGTTGTCGTAGTGGCTGCCGCAGC"
                     "GGATGACGAAGAGGGTGGCGGAGGG")
-        countstruct = getdict(self.counterc.countcodons(one_each))
+        countstruct = getdict(self.counterc.countcodons(five_each))
         for key in countstruct:
             eq_(countstruct[key], 5)
 
