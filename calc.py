@@ -28,7 +28,7 @@ def compute_ratio(organism, codon_table):
             if (codon_count != 0):
                 ratio = codon_count / acid_count
             else:
-                ratio = 1
+                ratio = 0
             ratios[codon] = ratio
     return ratios
 
