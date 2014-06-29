@@ -17,7 +17,7 @@ data = json.load(sys.stdin)
 connection_string = 'host={host} dbname={dbname} user={user} password={password}'.format(**locals())
 conn = psycopg2.connect(connection_string)
 cur = conn.cursor()
-SQL = "INSERT INTO refseq2 (id, name, description, ACT, ACG, ACA, ACC, ATC, ATG, ATA, ATT, AGC, AGT, AGA, AGG, AAC, AAT, AAG, AAA, CAT, CAG, CAA, CAC, CTA, CTG, CTC, CTT, CGA, CGT, CGC, CGG, CCA, CCT, CCG, CCC, TAC, TAG, TAA, TAT, TCA, TCG, TCC, TCT, TGA, TGC, TGT, TGG, TTA, TTC, TTG, TTT, GAC, GAT, GAA, GAG, GCA, GCT, GCC, GCG, GTA, GTC, GTT, GTG, GGA, GGC, GGT, GGG) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+SQL = "INSERT INTO refseq (id, name, description, ACT, ACG, ACA, ACC, ATC, ATG, ATA, ATT, AGC, AGT, AGA, AGG, AAC, AAT, AAG, AAA, CAT, CAG, CAA, CAC, CTA, CTG, CTC, CTT, CGA, CGT, CGC, CGG, CCA, CCT, CCG, CCC, TAC, TAG, TAA, TAT, TCA, TCG, TCC, TCT, TGA, TGC, TGT, TGG, TTA, TTC, TTG, TTT, GAC, GAT, GAA, GAG, GCA, GCT, GCC, GCG, GTA, GTC, GTT, GTG, GGA, GGC, GGT, GGG) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
 
 for org in data:
     id = str(org['id'])
