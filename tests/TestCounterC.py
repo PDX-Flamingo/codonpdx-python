@@ -457,7 +457,7 @@ class TestCounterC():
         eq_(countstruct['GGG'], 16)
 
     @istest
-    def test_random_sequence(self):
+    def test_random_sequence_cow(self):
         f = open('cow.seq', 'r')
         countstruct = getdict(self.counterc.countcodons(f.readline()))
         eq_(countstruct['TTT'], 1169127)
