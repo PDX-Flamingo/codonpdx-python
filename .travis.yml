@@ -5,13 +5,10 @@ python:
 # command to install dependencies
 install:
   - "pip install -r requirements.txt"
-  - "wget https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb"
   - "wget https://www.dropbox.com/s/n67qz6k262ghxuz/cow.seq"
   - "make"
 # command to run tests
 script: 
   - "python --version"
   - "pep8 *.py*"
-  - "cat NC_005816.gb | python main.py -f genbank"
-  - "cat cow.seq | python bench.py"
-  
+  - "nosetests"
