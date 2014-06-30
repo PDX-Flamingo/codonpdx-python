@@ -73,6 +73,9 @@ class TestCounterC():
     def test_simple_sequence_modulo_3_is_0(self):
         countstruct = getdict(self.counterc.countcodons("AAACCCTTTGGG"))
         eq_(countstruct['TTT'], 1)
+        eq_(countstruct['CCC'], 1)
+        eq_(countstruct['AAA'], 1)
+        eq_(countstruct['GGG'], 1)
         eq_(countstruct['TTC'], 0)
         eq_(countstruct['TTA'], 0)
         eq_(countstruct['TTG'], 0)
@@ -93,7 +96,6 @@ class TestCounterC():
         eq_(countstruct['CTA'], 0)
         eq_(countstruct['CTG'], 0)
         eq_(countstruct['CCT'], 0)
-        eq_(countstruct['CCC'], 1)
         eq_(countstruct['CCA'], 0)
         eq_(countstruct['CCG'], 0)
         eq_(countstruct['CAT'], 0)
@@ -114,7 +116,6 @@ class TestCounterC():
         eq_(countstruct['ACG'], 0)
         eq_(countstruct['AAT'], 0)
         eq_(countstruct['AAC'], 0)
-        eq_(countstruct['AAA'], 1)
         eq_(countstruct['AAG'], 0)
         eq_(countstruct['AGT'], 0)
         eq_(countstruct['AGC'], 0)
@@ -135,12 +136,14 @@ class TestCounterC():
         eq_(countstruct['GGT'], 0)
         eq_(countstruct['GGC'], 0)
         eq_(countstruct['GGA'], 0)
-        eq_(countstruct['GGG'], 1)
 
     @istest
     def test_simple_sequence_modulo_3_is_1(self):
         countstruct = getdict(self.counterc.countcodons("AAACCCTTTGGGA"))
         eq_(countstruct['TTT'], 1)
+        eq_(countstruct['CCC'], 1)
+        eq_(countstruct['AAA'], 1)
+        eq_(countstruct['GGG'], 1)
         eq_(countstruct['TTC'], 0)
         eq_(countstruct['TTA'], 0)
         eq_(countstruct['TTG'], 0)
@@ -161,7 +164,6 @@ class TestCounterC():
         eq_(countstruct['CTA'], 0)
         eq_(countstruct['CTG'], 0)
         eq_(countstruct['CCT'], 0)
-        eq_(countstruct['CCC'], 1)
         eq_(countstruct['CCA'], 0)
         eq_(countstruct['CCG'], 0)
         eq_(countstruct['CAT'], 0)
@@ -182,7 +184,6 @@ class TestCounterC():
         eq_(countstruct['ACG'], 0)
         eq_(countstruct['AAT'], 0)
         eq_(countstruct['AAC'], 0)
-        eq_(countstruct['AAA'], 1)
         eq_(countstruct['AAG'], 0)
         eq_(countstruct['AGT'], 0)
         eq_(countstruct['AGC'], 0)
@@ -203,12 +204,14 @@ class TestCounterC():
         eq_(countstruct['GGT'], 0)
         eq_(countstruct['GGC'], 0)
         eq_(countstruct['GGA'], 0)
-        eq_(countstruct['GGG'], 1)
 
     @istest
     def test_simple_sequence_modulo_3_is_2(self):
         countstruct = getdict(self.counterc.countcodons("AAACCCTTTGGGAC"))
         eq_(countstruct['TTT'], 1)
+        eq_(countstruct['CCC'], 1)
+        eq_(countstruct['AAA'], 1)
+        eq_(countstruct['GGG'], 1)
         eq_(countstruct['TTC'], 0)
         eq_(countstruct['TTA'], 0)
         eq_(countstruct['TTG'], 0)
@@ -229,7 +232,6 @@ class TestCounterC():
         eq_(countstruct['CTA'], 0)
         eq_(countstruct['CTG'], 0)
         eq_(countstruct['CCT'], 0)
-        eq_(countstruct['CCC'], 1)
         eq_(countstruct['CCA'], 0)
         eq_(countstruct['CCG'], 0)
         eq_(countstruct['CAT'], 0)
@@ -250,7 +252,6 @@ class TestCounterC():
         eq_(countstruct['ACG'], 0)
         eq_(countstruct['AAT'], 0)
         eq_(countstruct['AAC'], 0)
-        eq_(countstruct['AAA'], 1)
         eq_(countstruct['AAG'], 0)
         eq_(countstruct['AGT'], 0)
         eq_(countstruct['AGC'], 0)
@@ -271,12 +272,14 @@ class TestCounterC():
         eq_(countstruct['GGT'], 0)
         eq_(countstruct['GGC'], 0)
         eq_(countstruct['GGA'], 0)
-        eq_(countstruct['GGG'], 1)
 
     @istest
     def test_simple_sequence_invalid_in_the_middle(self):
         countstruct = getdict(self.counterc.countcodons("AAACCCTNTNTNNAATTTGGG"))
         eq_(countstruct['TTT'], 1)
+        eq_(countstruct['CCC'], 1)
+        eq_(countstruct['AAA'], 1)
+        eq_(countstruct['GGG'], 1)
         eq_(countstruct['TTC'], 0)
         eq_(countstruct['TTA'], 0)
         eq_(countstruct['TTG'], 0)
@@ -297,7 +300,6 @@ class TestCounterC():
         eq_(countstruct['CTA'], 0)
         eq_(countstruct['CTG'], 0)
         eq_(countstruct['CCT'], 0)
-        eq_(countstruct['CCC'], 1)
         eq_(countstruct['CCA'], 0)
         eq_(countstruct['CCG'], 0)
         eq_(countstruct['CAT'], 0)
@@ -318,7 +320,6 @@ class TestCounterC():
         eq_(countstruct['ACG'], 0)
         eq_(countstruct['AAT'], 0)
         eq_(countstruct['AAC'], 0)
-        eq_(countstruct['AAA'], 1)
         eq_(countstruct['AAG'], 0)
         eq_(countstruct['AGT'], 0)
         eq_(countstruct['AGC'], 0)
@@ -339,7 +340,6 @@ class TestCounterC():
         eq_(countstruct['GGT'], 0)
         eq_(countstruct['GGC'], 0)
         eq_(countstruct['GGA'], 0)
-        eq_(countstruct['GGG'], 1)
 
     @istest
     def test_random_sequence(self):
