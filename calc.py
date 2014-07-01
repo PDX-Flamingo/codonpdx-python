@@ -4,14 +4,14 @@ from __future__ import division
 from collections import defaultdict
 import ConfigParser
 import sys
-import psycopg2
-import psycopg2.extras
+import psycopg2cffi
+import psycopg2cffi.extras
 
 def comparision(virus, orgs, codon_table):
     ratio_scores = defaultdict(int)
     virus_ratio = compute_ratio(virus, codon_table)
     for org in orgs:
-        id = org['description']
+        id = org['id']
         org_ratio = compute_ratio(org, codon_table)
         for k in virus_ratio:
             ratio_scores[id] += abs(virus_ratio[k] - org_ratio[k])
@@ -40,14 +40,13 @@ def dbconnect():
     user = config.get('database', 'user')
     password = config.get('database', 'password')
     connection_string = 'host={host} dbname={dbname} user={user} password={password}'.format(**locals())
-    conn = psycopg2.connect(connection_string)
+    conn = psycopg2cffi.connect(connection_string)
     return conn
 
 def getCodonTable(cur):
     CODON_TABLE_SQL = "select acid,string_agg(codon, ' ') as codons from codon_table group by acid order by acid;"
     cur.execute(CODON_TABLE_SQL)
     return cur.fetchall()
-
 
 def getVirus(cur):
     VIRUS_SQL = "select * from refseq where id = 'NG_027788.1';"
@@ -62,7 +61,7 @@ def getOrganisms(cur, source):
 
 def main(argv):
     conn = dbconnect()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
     codon_table = getCodonTable(cur)
     virus = getVirus(cur)
     orgs = getOrganisms(cur, 'refseq')
