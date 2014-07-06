@@ -1,7 +1,7 @@
 """ Unit Tests for CounterC """
 
 from ctypes import *
-from CodonCountStruct import CodonCount
+from codonpdx.CodonCountStruct import CodonCount
 from nose.tools import ok_, eq_, istest
 
 
@@ -12,7 +12,7 @@ def getdict(struct):
 
 
 class TestCounterC():
-    counterc = CDLL('./counterc.so')
+    counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount
 

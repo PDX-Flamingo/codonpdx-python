@@ -6,8 +6,8 @@ libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
 # the build target executable:
-TARGET = counterc
-TRIE_CODON = trie_codon
+TARGET = lib/counterc
+TRIE_CODON = lib/trie_codon
 
 CC = gcc
 CFLAGS  = -shared -Wl,-soname,$(TARGET).so -Wl,--no-undefined -std=c99 -O3 -funroll-loops
@@ -23,4 +23,4 @@ $(TARGET): $(TARGET).c
 	$(CC) $(CFLAGS) -o $(TARGET).so -fPIC $(TARGET).c $(TRIE_CODON).c
 
 clean:
-	$(RM) $(TARGET).so
+	$(RM) lib/$(TARGET).so
