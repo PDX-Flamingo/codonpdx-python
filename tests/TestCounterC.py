@@ -1,7 +1,7 @@
 """ Unit Tests for CounterC """
 
 from ctypes import *
-from CodonCountStruct import CodonCount
+from codonpdx.CodonCountStruct import CodonCount
 from nose.tools import ok_, eq_, istest
 
 
