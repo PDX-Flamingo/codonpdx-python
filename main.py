@@ -33,7 +33,7 @@ def main(argv):
         elif opt in ("-f", "--format"):
             format = arg
 
-    counterc = CDLL('./counterc.so')
+    counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount
 

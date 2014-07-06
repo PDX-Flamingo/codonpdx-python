@@ -12,7 +12,7 @@ def getdict(struct):
 
 
 class TestCounterC():
-    counterc = CDLL('./counterc.so')
+    counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount
 
