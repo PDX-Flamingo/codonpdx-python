@@ -1,5 +1,5 @@
 # config
-db.cfg
+config/db.cfg
 
 # sequence files
 *.gb
