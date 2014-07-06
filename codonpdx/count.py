@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import json
 
 from ctypes import *
@@ -14,7 +12,19 @@ def getdict(struct):
         )
 
 
-def codonCount(inputfile, format):
+def writeCounts(data, prettyPrint):
+    if prettyPrint:
+        sort = True
+        ident = 2
+    else:
+        sort = False
+        ident = None
+
+    if data:
+        print json.dumps(data, sort_keys=sort, indent=ident)
+
+
+def codonCount(inputfile, format, prettyPrint):
     counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount
@@ -33,6 +43,4 @@ def codonCount(inputfile, format):
                      "dbxrefs": seq_record.dbxrefs,
                      "codoncount": getdict(cstruct)
                      }]
-
-    if data:
-        print json.dumps(data, sort_keys=True, indent=2)
+    writeCounts(data, prettyPrint)

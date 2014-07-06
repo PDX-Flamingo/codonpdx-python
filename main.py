@@ -6,8 +6,10 @@ import sys
 def main(argv):
     inputfile = sys.stdin
     format = 'fasta'
+    prettyPrint = False
     try:
-        opts, args = getopt.getopt(argv, "hi:f:", ["ifile=", "format="])
+        opts, args = getopt.getopt(argv, "hi:f:p",
+                                   ["ifile=", "format=", "pretty"])
     except getopt.GetoptError:
         print ('count.py -i <inputfile> -f <format>')
         sys.exit(2)
@@ -19,8 +21,10 @@ def main(argv):
             inputfile = arg
         elif opt in ("-f", "--format"):
             format = arg
+        elif opt in ("-p", "--pretty"):
+            prettyPrint = True
 
-    codonpdx.count.codonCount(inputfile, format)
+    codonpdx.count.codonCount(inputfile, format, prettyPrint)
 
 
 if __name__ == "__main__":
