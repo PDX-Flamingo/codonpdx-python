@@ -24,8 +24,14 @@ Usage
 -------
 
 ```bash
+# generate codon count metadata for a file
 zcat ~/refseq/release/complete/complete.1.genomic.gbff.gz| ./codonpdx.py count -f genbank > /tmp/complete.1.json
+
+# load count metadata into refseq
 cat /tmp/complete.1.json | ./codonpdx.py loadDB -d refseq
+
+# calculate scores for NG_027788.1
+./codonpdx.py calcScore -d refseq -v NG_027788.1
 ```
 
 Results

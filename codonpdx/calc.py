@@ -37,7 +37,7 @@ def compute_ratio(organism, codon_table):
 
 def dbconnect():
     config = ConfigParser.RawConfigParser()
-    config.read('db.cfg')
+    config.read('config/db.cfg')
     host = config.get('database', 'host')
     dbname = config.get('database', 'dbname')
     user = config.get('database', 'user')
@@ -55,25 +55,25 @@ def getCodonTable(cur):
     return cur.fetchall()
 
 
-def getVirus(cur):
-    VIRUS_SQL = "select * from refseq where id = 'NG_027788.1';"
-    cur.execute(VIRUS_SQL)
+def getVirus(cur, virus):
+    sql = "select * from refseq where id = (%s);"
+    cur.execute(sql, (virus,))
     return cur.fetchone()
 
 
 def getOrganisms(cur, source):
     sql = "select * from " + source + ";"
-    cur.execute(sql)
+    cur.execute(sql, source)
     orgs = cur.fetchall()
     return orgs
 
 
-def main(argv):
+def calcScore(args):
     conn = dbconnect()
     cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
     codon_table = getCodonTable(cur)
-    virus = getVirus(cur)
-    orgs = getOrganisms(cur, 'refseq')
+    virus = getVirus(cur, args.virus)
+    orgs = getOrganisms(cur, args.dbname)
 
     results = comparision(virus, orgs, codon_table)
     for k in sorted(results, key=results.get):
@@ -82,7 +82,3 @@ def main(argv):
     conn.commit()
     cur.close()
     conn.close()
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
