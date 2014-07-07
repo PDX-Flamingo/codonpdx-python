@@ -24,7 +24,8 @@ Usage
 -------
 
 ```bash
-python main.py -i cow.rna.fna  > /tmp/output.json
+zcat ~/refseq/release/complete/complete.1.genomic.gbff.gz| ./codonpdx.py count -f genbank > /tmp/complete.1.json
+cat /tmp/complete.1.json | ./codonpdx.py loadDB -d refseq
 ```
 
 Results
