@@ -12,8 +12,8 @@ def getdict(struct):
         )
 
 
-def writeCounts(data, prettyPrint):
-    if prettyPrint:
+def writeCounts(data, pretty):
+    if pretty:
         sort = True
         ident = 2
     else:
@@ -24,14 +24,14 @@ def writeCounts(data, prettyPrint):
         print json.dumps(data, sort_keys=sort, indent=ident)
 
 
-def codonCount(inputfile, format, prettyPrint):
+def codonCount(args):
     counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount
 
     data = []
 
-    for seq_record in SeqIO.parse(inputfile, format):
+    for seq_record in SeqIO.parse(args.infile, args.format):
         if len(seq_record.seq) != seq_record.seq.count("N"):
             cstruct = counterc.countcodons(str(seq_record.seq))
             data += [{
@@ -43,4 +43,4 @@ def codonCount(inputfile, format, prettyPrint):
                      "dbxrefs": seq_record.dbxrefs,
                      "codoncount": getdict(cstruct)
                      }]
-    writeCounts(data, prettyPrint)
+    writeCounts(data, args.pretty)
