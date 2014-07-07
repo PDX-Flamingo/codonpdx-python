@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from codonpdx.calc import calcScore
 from codonpdx.count import codonCount
 from codonpdx.db import loadDB
 
@@ -31,6 +32,18 @@ parserLoadDB.add_argument('-i', '--infile', nargs='?',
                           type=argparse.FileType('r'), default=sys.stdin,
                           help='a file path')
 parserLoadDB.set_defaults(func=loadDB)
+
+
+# create the parser for the "calcScore" command
+parserCalcScore = subparsers.add_parser(
+    'calcScore',
+    help='calculate the codon count scores'
+)
+parserCalcScore.add_argument('-d', '--dbname', choices=['refseq', 'genbank'],
+                             help='the dbname to fetch the count metadata')
+parserCalcScore.add_argument('-v', '--virus', required=True,
+                             help='the virus id to compare against')
+parserCalcScore.set_defaults(func=calcScore)
 
 args = parser.parse_args()
 args.func(args)
