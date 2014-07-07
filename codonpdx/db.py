@@ -69,15 +69,11 @@ def insertCounts(data, cur, dbname):
         )
 
 
-def main(argv):
-    data = json.load(sys.stdin)
+def loadDB(args):
+    data = json.load(args.infile)
     conn = connectToDb()
     cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
-    insertCounts(data, cur, 'refseq')
+    insertCounts(data, cur, args.dbname)
     conn.commit()
     cur.close()
     conn.close()
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
