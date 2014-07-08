@@ -81,7 +81,7 @@ def comparison(db, virus_name, seq_db, codon_table_name='standard'):
 		for k in virus_ratio:
 			scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
 	return scores
-	
+
 # calculate the ratios for a given organism using a certain codon table
 # organism: the organism; needs be a dict that can map codon triplets to counts
 # codon_table: the codon table acquired from a dbManager
