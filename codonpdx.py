@@ -4,7 +4,7 @@ import argparse
 import sys
 from codonpdx.calc import calcScore
 from codonpdx.count import codonCount
-from codonpdx.db import loadDB
+from codonpdx.insert import loadDB
 
 # create the top-level parser
 parser = argparse.ArgumentParser(prog='codonpdx',
