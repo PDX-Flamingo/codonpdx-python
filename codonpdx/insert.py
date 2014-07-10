@@ -73,7 +73,7 @@ def insertCounts(data, cur, dbname):
         )
 
 
-def loadDB(args):
+def insert(args):
     data = json.load(args.infile)
     conn = connectToDb()
     cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)

@@ -28,7 +28,7 @@ def writeCounts(data, pretty):
 # args.infile = path to a file to parse
 # args.format = 'fasta' or 'genbank', the format of the file
 # args.pretty = boolean, whether or not to pretty-print the resulting JSON
-def codonCount(args):
+def count(args):
     counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
     counterc.countcodons.restype = CodonCount

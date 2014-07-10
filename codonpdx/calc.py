@@ -3,6 +3,7 @@
 from __future__ import division
 from collections import defaultdict
 import sys
+import datetime
 from db import dbManager
 
 
@@ -46,9 +47,17 @@ def ratio(organism, codon_table):
     return ratios
 
 
-def calcScore(args):
+def calc(args):
+    time = datetime.datetime.now()
     db = dbManager('config/db.cfg')
     # do a comparison of virus 'NG_027788.1' with codon table 'standard'
-    results = comparison(db, args.virus, args.dbname, 'standard')
-    for k in sorted(results, key=results.get):
-        print results[k], k
+    scores = comparison(db, args.virus, args.dbname, 'standard')
+    # output if requested
+    if args.output:
+        print "Scores for " + args.virus + " versus " + args.dbname
+        for k in sorted(scores, key=scores.get):
+            print scores[k], k
+    # otherwise put in the results table
+    else:
+        db.storeResults(args.virus, time, scores)
+    db.commit()

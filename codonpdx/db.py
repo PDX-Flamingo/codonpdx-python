@@ -33,8 +33,8 @@ class dbManager:
         self.conn = psycopg2cffi.connect(connection_string)
         self.cur = self.conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
 
-    # destructor
-    def __del__(self):
+    # call this to commit changes
+    def commit(self):
         # complete db transaction
         self.conn.commit()
         self.cur.close()
@@ -44,8 +44,9 @@ class dbManager:
     # virus: the accession and version number of the virus
     # source: the sequence database to get the virus from
     def getOrganism(self, name, source):
-        self.cur.execute("SELECT * FROM "+source+" " +
-                         "WHERE id=(%s);", (name,))
+        self.cur.execute("SELECT * FROM "+source+" "
+                         "WHERE id=(%s);",
+                         (name,))
         return self.cur.fetchone()
 
     # acuqire all the organisms from a sequence database
@@ -59,9 +60,23 @@ class dbManager:
     # kind: the name of the table to acquire
     #  This string is used directly in the query and needs to be safe
     def getCodonTable(self, kind='standard'):
-        self.cur.execute("SELECT acid,string_agg(codon, ' ') AS codons " +
-                         "FROM codon_table " +
-                         "WHERE name=(%s) " +
-                         "GROUP BY acid " +
-                         "ORDER BY acid;", (kind,))
+        self.cur.execute("SELECT acid,string_agg(codon, ' ')"
+                         "AS codons "
+                         "FROM codon_table "
+                         "WHERE name=(%s) "
+                         "GROUP BY acid "
+                         "ORDER BY acid;",
+                         (kind,))
         return self.cur.fetchall()
+
+    # take the results of a comparison operation and store them in the
+    # results table
+    # org1: id of the organism being compared
+    # time: datetime of when the comparison started
+    # scores: map from organism id -> comparison score
+    def storeResults(self, org1, time, scores):
+        for org2 in scores:
+            self.cur.execute("INSERT INTO results "
+                             "(time,organism1,organism2,score) "
+                             "VALUES (%s,%s,%s,%s);",
+                             (time.isoformat(' '), org1, org2, scores[org2],))
