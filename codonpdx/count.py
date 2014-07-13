@@ -1,9 +1,8 @@
 import json
+import Bio
 
 from ctypes import *
 from CodonCountStruct import CodonCount
-
-from Bio import SeqIO
 
 
 # convert ctypes structure into a python dictionary
