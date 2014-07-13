@@ -79,4 +79,4 @@ class dbManager:
             self.cur.execute("INSERT INTO results "
                              "(job_uuid,organism1,organism2,score) "
                              "VALUES (%s,%s,%s,%s);",
-                             (time.isoformat(' '), org1, org2, scores[org2],))
+                             (job_uuid, org1, org2, scores[org2],))
