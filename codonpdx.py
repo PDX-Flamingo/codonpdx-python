@@ -45,6 +45,8 @@ parserCalcScore.add_argument('-v', '--virus', required=True,
                              help='The accession.version number of the organism to compare. (Currently must be located in the sequence database to compare against.)')
 parserCalcScore.add_argument('-o', '--output', action='store_true',
                              help='Output scores to stdout instead of storing in the results table.')
+parserCalcScore.add_argument('-j', '--job', required=True,
+                             help='The UUID for the job if this process is placing its results into the results table.')
 parserCalcScore.set_defaults(func=codonpdx.calc.calc)
 
 args = parser.parse_args()

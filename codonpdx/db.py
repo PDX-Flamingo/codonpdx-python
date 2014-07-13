@@ -72,11 +72,11 @@ class dbManager:
     # take the results of a comparison operation and store them in the
     # results table
     # org1: id of the organism being compared
-    # time: datetime of when the comparison started
+    # job_uuid: datetime of when the comparison started
     # scores: map from organism id -> comparison score
-    def storeResults(self, org1, time, scores):
+    def storeResults(self, org1, job_uuid, scores):
         for org2 in scores:
             self.cur.execute("INSERT INTO results "
-                             "(time,organism1,organism2,score) "
+                             "(job_uuid,organism1,organism2,score) "
                              "VALUES (%s,%s,%s,%s);",
                              (time.isoformat(' '), org1, org2, scores[org2],))
