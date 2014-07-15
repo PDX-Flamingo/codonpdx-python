@@ -2,3 +2,4 @@ biopython
 nose
 pep8
 psycopg2cffi
+celery

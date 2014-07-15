@@ -1,5 +1,6 @@
 import json
 import Bio
+import Bio.SeqIO
 
 from ctypes import *
 from CodonCountStruct import CodonCount
@@ -20,13 +21,14 @@ def writeCounts(data, pretty):
     else:
         sort = False
         ident = None
-    print json.dumps(data, sort_keys=sort, indent=ident)
+    return json.dumps(data, sort_keys=sort, indent=ident)
 
 
 # count codons and produce json containing the organism information & counts
 # args.infile = path to a file to parse
 # args.format = 'fasta' or 'genbank', the format of the file
 # args.pretty = boolean, whether or not to pretty-print the resulting JSON
+# args.output = file to output the JSON to
 def count(args):
     counterc = CDLL('./lib/counterc.so')
     counterc.countcodons.argtypes = (c_char_p,)
@@ -34,7 +36,7 @@ def count(args):
 
     data = []
 
-    for seq_record in SeqIO.parse(args.infile, args.format):
+    for seq_record in Bio.SeqIO.parse(args.infile, args.format):
         # only bother producing output if there is actual sequence data;
         # i.e., not all unknowns
         if len(seq_record.seq) != seq_record.seq.count("N"):
@@ -52,4 +54,6 @@ def count(args):
                      }]
     # only write if data exists (i.e., we actually had sequence data
     if data:
-        writeCounts(data, args.pretty)
+        json = writeCounts(data, args.pretty)
+        args.output.write(json)
+        return json

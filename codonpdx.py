@@ -21,12 +21,15 @@ parserCount.add_argument('-f', '--format', choices=['fasta', 'genbank'],
                          help='The file format.')
 parserCount.add_argument('-p', '--pretty', action='store_true',
                          help='Print the JSON in a pretty, more human-readable way.')
+parserCount.add_argument('-o', '--output', nargs='?',
+                         type=argparse.FileType('w'), default=sys.stdout,
+                         help='Where to place the output JSON.')
 parserCount.set_defaults(func=codonpdx.count.count)
 
 # create the parser for the "insert" command
 parserLoadDB = subparsers.add_parser('insert',
                                      help='Insert organism codon count JSON information into the database.')
-parserLoadDB.add_argument('-d', '--dbname', choices=['refseq', 'genbank'],
+parserLoadDB.add_argument('-d', '--dbname', choices=['refseq', 'genbank', 'input'],
                           help='The database table to store the count information in.')
 parserLoadDB.add_argument('-i', '--infile', nargs='?',
                           type=argparse.FileType('r'), default=sys.stdin,
@@ -42,7 +45,10 @@ parserCalcScore = subparsers.add_parser(
 parserCalcScore.add_argument('-d', '--dbname', choices=['refseq', 'genbank'],
                              help='The sequence database to compare the organism to.')
 parserCalcScore.add_argument('-v', '--virus', required=True,
-                             help='The accession.version number of the organism to compare. (Currently must be located in the sequence database to compare against.)')
+                             help='The accession.version number of the organism to compare.')
+parserCalcScore.add_argument('-w', '--virusdb', choices=['input', 'refseq', 'genbank'],
+                             default='input',
+                             help='The database table where the input virus resides.')
 parserCalcScore.add_argument('-o', '--output', action='store_true',
                              help='Output scores to stdout instead of storing in the results table.')
 parserCalcScore.add_argument('-j', '--job', required=True,

@@ -3,17 +3,17 @@
 from __future__ import division
 from collections import defaultdict
 import sys
-import datetime
 from db import dbManager
 
 
 # compare a virus to organisms in a sequence database
 # db: the database manager used to get the data from
 # virus_name: the accession and version number of the virus
+# virus_db: the location of the input virus's information (probably 'input')
 # seq_db: the name of the sequence database table
 # codon_table_name: the name of the codon table
-def comparison(db, virus_name, seq_db, codon_table_name='standard'):
-    virus = db.getOrganism(virus_name, seq_db)
+def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
+    virus = db.getOrganism(virus_name, virus_db)
     codon_table = db.getCodonTable(codon_table_name)
     scores = defaultdict(int)
     virus_ratio = ratio(virus, codon_table)
@@ -48,10 +48,9 @@ def ratio(organism, codon_table):
 
 
 def calc(args):
-    time = datetime.datetime.now()
     db = dbManager('config/db.cfg')
     # do a comparison of virus 'NG_027788.1' with codon table 'standard'
-    scores = comparison(db, args.virus, args.dbname, 'standard')
+    scores = comparison(db, args.virus, args.virusdb, args.dbname, 'standard')
     # output if requested
     if args.output:
         print "Scores for " + args.virus + " versus " + args.dbname

@@ -81,3 +81,4 @@ def insert(args):
     conn.commit()
     cur.close()
     conn.close()
+    return data
