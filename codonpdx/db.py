@@ -33,8 +33,20 @@ class dbManager:
         self.conn = psycopg2cffi.connect(connection_string)
         self.cur = self.conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
 
-    # call this to commit changes
-    def commit(self):
+    # on garbage collect, close connections if the user forgot to do so
+    def __del__(self):
+        self.close()
+
+    # for with-as statements; do nothing special on entry
+    def __enter__(self):
+        return self
+
+    # but close the connection when exiting that scope
+    def __exit__(exc_type, exc_val, exc_tb):
+        self.close()
+
+    # call this when finished with the connection
+    def close(self):
         # complete db transaction
         self.conn.commit()
         self.cur.close()
