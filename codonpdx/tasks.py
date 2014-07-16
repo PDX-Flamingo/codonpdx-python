@@ -5,7 +5,7 @@ import codonpdx.insert
 import codonpdx.calc
 
 from time import sleep
-from codonpdx.celeryapp import app
+from codonpdx.celery import app
 from random import randint, uniform
 
 
