@@ -81,6 +81,22 @@ class dbManager:
                          (kind,))
         return self.cur.fetchall()
 
+    # insert an organism into a table
+    # org: dictionary describing the organism
+    # table: what table to insert the organism into
+    def insertOrganism(self, org, table):
+        insert = "INSERT INTO " + table + " ";
+        cols = "(id, name, description";
+        vals = "VALUES (%s, %s, %s";
+        data = [org['id'], org['name'], org['description']]
+        for codon,count in org['codoncount'].iteritems():
+            cols += ", " + codon
+            vals += ", %s"
+            data.append(count)
+        cols += ") "
+        vals += ");"
+        self.cur.execute(insert + cols + vals, tuple(data));
+
     # take the results of a comparison operation and store them in the
     # results table
     # org1: id of the organism being compared
