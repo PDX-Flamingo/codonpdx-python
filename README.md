@@ -32,6 +32,9 @@ cat /tmp/complete.1.json | ./codonpdx.py loadDB -d refseq
 
 # calculate scores for NG_027788.1
 ./codonpdx.py calcScore -d refseq -v NG_027788.1
+
+# Run as celery worker process
+celery -A codonpdx worker -l info
 ```
 
 Results
