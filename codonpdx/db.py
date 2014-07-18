@@ -31,7 +31,9 @@ class dbManager:
                              password={password}'.format(**locals())
         # set up connection and cursor members
         self.conn = psycopg2cffi.connect(connection_string)
-        self.cur = self.conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
+        self.cur = self.conn.cursor(
+            cursor_factory=psycopg2cffi.extras.DictCursor
+        )
 
     # on garbage collect, close connections if the user forgot to do so
     def __del__(self):
@@ -85,17 +87,17 @@ class dbManager:
     # org: dictionary describing the organism
     # table: what table to insert the organism into
     def insertOrganism(self, org, table):
-        insert = "INSERT INTO " + table + " ";
-        cols = "(id, name, description";
-        vals = "VALUES (%s, %s, %s";
+        insert = "INSERT INTO " + table + " "
+        cols = "(id, name, description"
+        vals = "VALUES (%s, %s, %s"
         data = [org['id'], org['name'], org['description']]
-        for codon,count in org['codoncount'].iteritems():
+        for codon, count in org['codoncount'].iteritems():
             cols += ", " + codon
             vals += ", %s"
             data.append(count)
         cols += ") "
         vals += ");"
-        self.cur.execute(insert + cols + vals, tuple(data));
+        self.cur.execute(insert + cols + vals, tuple(data))
 
     # take the results of a comparison operation and store them in the
     # results table
