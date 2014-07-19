@@ -43,24 +43,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
     return job
 
 
-# Test Methods
+# Simple task to check if calls are working
 @app.task
-def random_int(job):
-    print "Start " + str(job)
-    sleep(uniform(0, 2))
-    return randint(1, 100)
-
-
-@app.task
-def add(x, y):
-    return x + y
-
-
-@app.task
-def mul(x, y):
-    return x * y
-
-
-@app.task
-def xsum(numbers):
-    return sum(numbers)
+def health_check():
+    return True
