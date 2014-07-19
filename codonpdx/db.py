@@ -1,79 +1,112 @@
 #!/usr/bin/env python
 
+from __future__ import division
+from collections import defaultdict
 import ConfigParser
-import json
+import sys
 import psycopg2cffi
 import psycopg2cffi.extras
-import sys
 
 
-def connectToDb():
-    config = ConfigParser.RawConfigParser()
-    config.read('config/db.cfg')
+class dbManager:
+    'Handles the database connection used by the calculator'
 
-    host = config.get('database', 'host')
-    dbname = config.get('database', 'dbname')
-    user = config.get('database', 'user')
-    password = config.get('database', 'password')
-
-    connection_string = 'host={host} dbname={dbname} user={user} \
-                         password={password}'.format(**locals())
-    conn = psycopg2cffi.connect(connection_string)
-    return conn
-
-
-def getCodons(cur):
-    sql = "select string_agg(codon, ' ') as codons from codon_table \
-           where name = 'standard';"
-    cur.execute(sql)
-    return cur.fetchone()['codons']
-
-
-def buildSQLStmt(cur, dbname):
-    sql = "INSERT INTO " + dbname + "(id, name, description"
-    startStmt = ""
-    endStmt = ") VALUES ("
-    codons = sorted(getCodons(cur).split(" "))
-    for codon in codons:
-        startStmt += ", " + codon
-        endStmt += "%s, "
-
-    return sql + startStmt + endStmt + "%s, %s, %s);"
-
-
-def insertCounts(data, cur, dbname):
-    for org in data:
-        id = str(org['id'])
-        name = str(org['name'])
-        desc = str(org['description'])
-        cc = org['codoncount']
-        cur.execute(
-            buildSQLStmt(cur, dbname),
-            (id, name, desc,  int(cc['AAA']), int(cc['AAC']), int(cc['AAG']),
-             int(cc['AAT']), int(cc['ACA']), int(cc['ACC']), int(cc['ACG']),
-             int(cc['ACT']), int(cc['AGA']), int(cc['AGC']), int(cc['AGG']),
-             int(cc['AGT']), int(cc['ATA']), int(cc['ATC']), int(cc['ATG']),
-             int(cc['ATT']), int(cc['CAA']), int(cc['CAC']), int(cc['CAG']),
-             int(cc['CAT']), int(cc['CCA']), int(cc['CCC']), int(cc['CCG']),
-             int(cc['CCT']), int(cc['CGA']), int(cc['CGC']), int(cc['CGG']),
-             int(cc['CGT']), int(cc['CTA']), int(cc['CTC']), int(cc['CTG']),
-             int(cc['CTT']), int(cc['GAA']), int(cc['GAC']), int(cc['GAG']),
-             int(cc['GAT']), int(cc['GCA']), int(cc['GCC']), int(cc['GCG']),
-             int(cc['GCT']), int(cc['GGA']), int(cc['GGC']), int(cc['GGG']),
-             int(cc['GGT']), int(cc['GTA']), int(cc['GTC']), int(cc['GTG']),
-             int(cc['GTT']), int(cc['TAA']), int(cc['TAC']), int(cc['TAG']),
-             int(cc['TAT']), int(cc['TCA']), int(cc['TCC']), int(cc['TCG']),
-             int(cc['TCT']), int(cc['TGA']), int(cc['TGC']), int(cc['TGG']),
-             int(cc['TGT']), int(cc['TTA']), int(cc['TTC']), int(cc['TTG']),
-             int(cc['TTT']))
+    # constructor
+    # conf: name of the config file to use to connect to the database
+    #  Should be an ini file with a section called "database" with three
+    #  properties:
+    #   "host": the host name
+    #   "dbname": the database name
+    #   "user": the name of the user to log in as
+    #   "password": the password to log in with
+    def __init__(self, conf):
+        # read config file to get connection information
+        config = ConfigParser.RawConfigParser()
+        config.read(conf)
+        host = config.get('database', 'host')
+        dbname = config.get('database', 'dbname')
+        user = config.get('database', 'user')
+        password = config.get('database', 'password')
+        connection_string = 'host={host} dbname={dbname} user={user} \
+                             password={password}'.format(**locals())
+        # set up connection and cursor members
+        self.conn = psycopg2cffi.connect(connection_string)
+        self.cur = self.conn.cursor(
+            cursor_factory=psycopg2cffi.extras.DictCursor
         )
 
+    # on garbage collect, close connections if the user forgot to do so
+    def __del__(self):
+        self.close()
 
-def loadDB(args):
-    data = json.load(args.infile)
-    conn = connectToDb()
-    cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
-    insertCounts(data, cur, args.dbname)
-    conn.commit()
-    cur.close()
-    conn.close()
+    # for with-as statements; do nothing special on entry
+    def __enter__(self):
+        return self
+
+    # but close the connection when exiting that scope
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
+    # call this when finished with the connection
+    def close(self):
+        # complete db transaction
+        self.conn.commit()
+        self.cur.close()
+        self.conn.close()
+
+    # get a virus from a sequence database
+    # virus: the accession and version number of the virus
+    # source: the sequence database to get the virus from
+    def getOrganism(self, name, source):
+        self.cur.execute("SELECT * FROM "+source+" "
+                         "WHERE id=(%s);",
+                         (name,))
+        return self.cur.fetchone()
+
+    # acuqire all the organisms from a sequence database
+    # source: the name of the sequence database (e.g., 'refseq')
+    #  This string is used directly in the query and needs to be safe
+    def getOrganisms(self, source):
+        self.cur.execute("SELECT * FROM "+source+";")
+        return self.cur.fetchall()
+
+    # get a codon <-> acid translation table
+    # kind: the name of the table to acquire
+    #  This string is used directly in the query and needs to be safe
+    def getCodonTable(self, kind='standard'):
+        self.cur.execute("SELECT acid,string_agg(codon, ' ')"
+                         "AS codons "
+                         "FROM codon_table "
+                         "WHERE name=(%s) "
+                         "GROUP BY acid "
+                         "ORDER BY acid;",
+                         (kind,))
+        return self.cur.fetchall()
+
+    # insert an organism into a table
+    # org: dictionary describing the organism
+    # table: what table to insert the organism into
+    def insertOrganism(self, org, table):
+        insert = "INSERT INTO " + table + " "
+        cols = "(id, name, description"
+        vals = "VALUES (%s, %s, %s"
+        data = [org['id'], org['name'], org['description']]
+        for codon, count in org['codoncount'].iteritems():
+            cols += ", " + codon
+            vals += ", %s"
+            data.append(count)
+        cols += ") "
+        vals += ");"
+        self.cur.execute(insert + cols + vals, tuple(data))
+
+    # take the results of a comparison operation and store them in the
+    # results table
+    # org1: id of the organism being compared
+    # job_uuid: datetime of when the comparison started
+    # scores: map from organism id -> comparison score
+    def storeResults(self, org1, job_uuid, scores):
+        for org2 in scores:
+            self.cur.execute("INSERT INTO results "
+                             "(job_uuid,organism1,organism2,score) "
+                             "VALUES (%s,%s,%s,%s);",
+                             (job_uuid, org1, org2, scores[org2],))

@@ -2,48 +2,118 @@
 
 import argparse
 import sys
-from codonpdx.calc import calcScore
-from codonpdx.count import codonCount
-from codonpdx.db import loadDB
+import codonpdx.count
+import codonpdx.insert
+import codonpdx.calc
 
 # create the top-level parser
 parser = argparse.ArgumentParser(prog='codonpdx',
-                                 description='codonpdx command line util')
+                                 description='Codonpdx command line utility.')
 parser.add_argument('--version', action='version', version='%(prog)s 1.0')
-subparsers = parser.add_subparsers(help='sub-command help')
+subparsers = parser.add_subparsers(help='Sub-command descriptions:')
 
 # create the parser for the "count" command
-parserCount = subparsers.add_parser('count', help='codon counter')
-parserCount.add_argument('-i', '--infile', nargs='?',
-                         type=argparse.FileType('r'), default=sys.stdin,
-                         help='a file path')
-parserCount.add_argument('-f', '--format', choices=['fasta', 'genbank'],
-                         help='the file format')
-parserCount.add_argument('-p', '--pretty', action='store_true',
-                         help='enable json pretty print')
-parserCount.set_defaults(func=codonCount)
-
-# create the parser for the "loadDB" command
-parserLoadDB = subparsers.add_parser('loadDB',
-                                     help='stores codon count metadata')
-parserLoadDB.add_argument('-d', '--dbname', choices=['refseq', 'genbank'],
-                          help='the dbname to store the count metadata')
-parserLoadDB.add_argument('-i', '--infile', nargs='?',
-                          type=argparse.FileType('r'), default=sys.stdin,
-                          help='a file path')
-parserLoadDB.set_defaults(func=loadDB)
-
-
-# create the parser for the "calcScore" command
-parserCalcScore = subparsers.add_parser(
-    'calcScore',
-    help='calculate the codon count scores'
+parserCount = subparsers.add_parser(
+    'count',
+    help='Count the codons of a file and produce JSON '
+         'output containing the results.'
 )
-parserCalcScore.add_argument('-d', '--dbname', choices=['refseq', 'genbank'],
-                             help='the dbname to fetch the count metadata')
-parserCalcScore.add_argument('-v', '--virus', required=True,
-                             help='the virus id to compare against')
-parserCalcScore.set_defaults(func=calcScore)
+parserCount.add_argument(
+    '-i',
+    '--infile',
+    nargs='?',
+    type=argparse.FileType('r'),
+    default=sys.stdin,
+    help='A file containing sequence data.'
+)
+parserCount.add_argument(
+    '-f',
+    '--format',
+    choices=['fasta', 'genbank'],
+    help='The file format.'
+)
+parserCount.add_argument(
+    '-p',
+    '--pretty',
+    action='store_true',
+    help='Print the JSON in a pretty, more human-readable way.'
+)
+parserCount.add_argument(
+    '-o',
+    '--output',
+    nargs='?',
+    type=argparse.FileType('w'),
+    default=sys.stdout,
+    help='Where to place the output JSON.'
+)
+parserCount.set_defaults(
+    func=codonpdx.count.count
+)
+
+# create the parser for the "insert" command
+parserLoadDB = subparsers.add_parser(
+    'insert',
+    help='Insert organism codon count JSON information into the database.'
+)
+parserLoadDB.add_argument(
+    '-d',
+    '--dbname',
+    choices=['refseq', 'genbank', 'input'],
+    help='The database table to store the count information in.'
+)
+parserLoadDB.add_argument(
+    '-i',
+    '--infile',
+    nargs='?',
+    type=argparse.FileType('r'),
+    default=sys.stdin,
+    help='The file to to read the JSON data from. Defaults to standard input.'
+)
+parserLoadDB.set_defaults(
+    func=codonpdx.insert.insert
+)
+
+# create the parser for the "calc" command
+parserCalcScore = subparsers.add_parser(
+    'calc',
+    help='Compare an organism to all other organisms in a given sequence '
+         'database.'
+)
+parserCalcScore.add_argument(
+    '-d',
+    '--dbname',
+    choices=['refseq', 'genbank'],
+    help='The sequence database to compare the organism to.'
+)
+parserCalcScore.add_argument(
+    '-v',
+    '--virus',
+    required=True,
+    help='The accession.version number of the organism to compare.'
+)
+parserCalcScore.add_argument(
+    '-w',
+    '--virusdb',
+    choices=['input', 'refseq', 'genbank'],
+    default='input',
+    help='The database table where the input virus resides.'
+)
+parserCalcScore.add_argument(
+    '-o',
+    '--output',
+    action='store_true',
+    help='Output scores to stdout instead of storing in the results table.'
+)
+parserCalcScore.add_argument(
+    '-j',
+    '--job',
+    required=True,
+    help='The UUID for the job if this process is placing its results into '
+         'the results table.'
+)
+parserCalcScore.set_defaults(
+    func=codonpdx.calc.calc
+)
 
 args = parser.parse_args()
 args.func(args)

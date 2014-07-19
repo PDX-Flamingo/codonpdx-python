@@ -2,83 +2,61 @@
 
 from __future__ import division
 from collections import defaultdict
-import ConfigParser
 import sys
-import psycopg2cffi
-import psycopg2cffi.extras
+from db import dbManager
 
 
-def comparision(virus, orgs, codon_table):
-    ratio_scores = defaultdict(int)
-    virus_ratio = compute_ratio(virus, codon_table)
-    for org in orgs:
-        id = org['id']
-        org_ratio = compute_ratio(org, codon_table)
+# compare a virus to organisms in a sequence database
+# db: the database manager used to get the data from
+# virus_name: the accession and version number of the virus
+# virus_db: the location of the input virus's information (probably 'input')
+# seq_db: the name of the sequence database table
+# codon_table_name: the name of the codon table
+def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
+    virus = db.getOrganism(virus_name, virus_db)
+    codon_table = db.getCodonTable(codon_table_name)
+    scores = defaultdict(int)
+    virus_ratio = ratio(virus, codon_table)
+    for organism in db.getOrganisms(seq_db):
+        organism_ratio = ratio(organism, codon_table)
+        # calculate the score for the virus and this organism
         for k in virus_ratio:
-            ratio_scores[id] += abs(virus_ratio[k] - org_ratio[k])
-    return ratio_scores
+            scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
+    return scores
 
 
-def compute_ratio(organism, codon_table):
+# calculate the ratios for a given organism using a certain codon table
+# organism: the organism; needs be a dict that can map codon triplets to counts
+# codon_table: the codon table acquired from a dbManager
+def ratio(organism, codon_table):
     ratios = {}
     for acid, codons in codon_table:
-        acid_count = 0
+        acid_total = 0
+        # calculate the total number of codons for the acid
         for codon in codons.split(" "):
-            acid_count += int(organism[codon.lower()])
+            acid_total += int(organism[codon.lower()])
+        # calculate the number of each individual codon
         for codon in codons.split(" "):
-            codon_count = int(organism[codon.lower()])
-            if (codon_count != 0):
-                ratio = codon_count / acid_count
+            codon_total = int(organism[codon.lower()])
+            if(codon_total != 0):
+                ratio = codon_total / acid_total
             else:
                 ratio = 0
+            # store ratio for this codon
             ratios[codon] = ratio
     return ratios
 
 
-def dbconnect():
-    config = ConfigParser.RawConfigParser()
-    config.read('config/db.cfg')
-    host = config.get('database', 'host')
-    dbname = config.get('database', 'dbname')
-    user = config.get('database', 'user')
-    password = config.get('database', 'password')
-    connection_string = 'host={host} dbname={dbname} user={user} \
-                         password={password}'.format(**locals())
-    conn = psycopg2cffi.connect(connection_string)
-    return conn
-
-
-def getCodonTable(cur):
-    sql = "select acid,string_agg(codon, ' ') as codons from codon_table \
-           group by acid order by acid;"
-    cur.execute(sql)
-    return cur.fetchall()
-
-
-def getVirus(cur, virus):
-    sql = "select * from refseq where id = (%s);"
-    cur.execute(sql, (virus,))
-    return cur.fetchone()
-
-
-def getOrganisms(cur, source):
-    sql = "select * from " + source + ";"
-    cur.execute(sql, source)
-    orgs = cur.fetchall()
-    return orgs
-
-
-def calcScore(args):
-    conn = dbconnect()
-    cur = conn.cursor(cursor_factory=psycopg2cffi.extras.DictCursor)
-    codon_table = getCodonTable(cur)
-    virus = getVirus(cur, args.virus)
-    orgs = getOrganisms(cur, args.dbname)
-
-    results = comparision(virus, orgs, codon_table)
-    for k in sorted(results, key=results.get):
-        print results[k], k
-
-    conn.commit()
-    cur.close()
-    conn.close()
+def calc(args):
+    with dbManager('config/db.cfg') as db:
+        # do a comparison of virus 'NG_027788.1' with codon table 'standard'
+        scores = comparison(db, args.virus, args.virusdb,
+                            args.dbname, 'standard')
+        # output if requested
+        if args.output:
+            print "Scores for " + args.virus + " versus " + args.dbname
+            for k in sorted(scores, key=scores.get):
+                print scores[k], k
+        # otherwise put in the results table
+        else:
+            db.storeResults(args.virus, args.job, scores)
