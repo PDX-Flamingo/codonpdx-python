@@ -54,9 +54,6 @@ def count(args):
                      # taxonomy information
                      "name": tax,
                      "description": seq_record.description,
-                     #"annotations": str(seq_record.annotations),
-                     #"features": str(seq_record.features),
-                     #"dbxrefs": seq_record.dbxrefs,
                      "codoncount": getdict(cstruct)
                      }]
     # only write if data exists (i.e., we actually had sequence data
