@@ -1,6 +1,6 @@
 CREATE TABLE refseq (
     id character varying(20) NOT NULL,
-    name character varying(20),
+    name character text,
     description text,
     aaa integer,
     aac integer,

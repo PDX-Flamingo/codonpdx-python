@@ -1,6 +1,6 @@
 CREATE TABLE input (
     id character varying(100) NOT NULL,
-    name character varying(100),
+    name character text,
     description text,
     aaa integer,
     aac integer,
