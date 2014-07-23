@@ -63,12 +63,16 @@ class dbManager:
                          (name,))
         return self.cur.fetchone()
 
-    # acuqire all the organisms from a sequence database
+    # generator to get the organisms from a sequence database
     # source: the name of the sequence database (e.g., 'refseq')
     #  This string is used directly in the query and needs to be safe
     def getOrganisms(self, source):
         self.cur.execute("SELECT * FROM "+source+";")
-        return self.cur.fetchall()
+        while True:
+            organism = self.cur.fetchone()
+            if not organism:
+                break
+            yield organism
 
     # get a codon <-> acid translation table
     # kind: the name of the table to acquire
