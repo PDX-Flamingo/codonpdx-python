@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
-import sys
+import codonpdx.calc
 import codonpdx.count
 import codonpdx.insert
-import codonpdx.calc
+import codonpdx.mirror
+import sys
 
 # create the top-level parser
 parser = argparse.ArgumentParser(prog='codonpdx',
@@ -113,6 +114,23 @@ parserCalcScore.add_argument(
 )
 parserCalcScore.set_defaults(
     func=codonpdx.calc.calc
+)
+
+# create the mirror subcommand
+parserMirror = subparsers.add_parser(
+    'mirror',
+    help='Mirror remote codon repository'
+)
+parserMirror.add_argument(
+    '-d',
+    '--dbname',
+    required=True,
+    choices=['refseq', 'genbank'],
+    help='The repository to mirror'
+)
+
+parserMirror.set_defaults(
+    func=codonpdx.mirror.mirror
 )
 
 args = parser.parse_args()
