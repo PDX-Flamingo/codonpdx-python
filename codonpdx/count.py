@@ -43,13 +43,17 @@ def count(args):
             # count the codons and put them in the data object along with
             # other metadata
             cstruct = counterc.countcodons(str(seq_record.seq))
+            # get taxonomy information
+            tax = ""
+            if 'taxonomy' in seq_record.annotations:
+                tax = ' '.join(seq_record.annotations['taxonomy'])
+            # add the sequence information into our results
             data += [{
+                     # accession.version
                      "id": seq_record.id,
-                     "name": seq_record.name,
+                     # taxonomy information
+                     "name": tax,
                      "description": seq_record.description,
-                     "annotations": str(seq_record.annotations),
-                     "features": str(seq_record.features),
-                     "dbxrefs": seq_record.dbxrefs,
                      "codoncount": getdict(cstruct)
                      }]
     # only write if data exists (i.e., we actually had sequence data

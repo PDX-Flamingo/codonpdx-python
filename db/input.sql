@@ -1,5 +1,5 @@
-CREATE TABLE refseq (
-    id character varying(20) NOT NULL,
+CREATE TABLE input (
+    id character varying(100) NOT NULL,
     name character text,
     description text,
     aaa integer,
