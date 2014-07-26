@@ -6,6 +6,7 @@ import ConfigParser
 import sys
 import psycopg2cffi
 import psycopg2cffi.extras
+import datetime
 
 
 class dbManager:
@@ -86,11 +87,17 @@ class dbManager:
     # insert an organism into a table
     # org: dictionary describing the organism
     # table: what table to insert the organism into
-    def insertOrganism(self, org, table):
+    # job: the job uuid; used in the case of inserting into input
+    def insertOrganism(self, org, table, job):
         insert = "INSERT INTO " + table + " "
-        cols = "(id, name, description"
-        vals = "VALUES (%s, %s, %s"
-        data = [org['id'], org['name'], org['description']]
+        cols = "(id, taxonomy, description, time"
+        vals = "VALUES (%s, %s, %s, %s"
+        data = [
+            org['id'] if table != 'input' else job,
+            org['taxonomy'],
+            org['description'],
+            datetime.datetime.utcnow()
+        ]
         for codon, count in org['codoncount'].iteritems():
             cols += ", " + codon
             vals += ", %s"
@@ -101,12 +108,12 @@ class dbManager:
 
     # take the results of a comparison operation and store them in the
     # results table
-    # org1: id of the organism being compared
     # job_uuid: datetime of when the comparison started
     # scores: map from organism id -> comparison score
-    def storeResults(self, org1, job_uuid, scores):
+    def storeResults(self, job_uuid, scores):
         for org2 in scores:
-            self.cur.execute("INSERT INTO results "
-                             "(job_uuid,organism1,organism2,score) "
-                             "VALUES (%s,%s,%s,%s);",
-                             (job_uuid, org1, org2, scores[org2],))
+            self.cur.execute(
+                "INSERT INTO results "
+                "(job_uuid,organism2,score,time) "
+                "VALUES (%s,%s,%s,%s,%s);",
+                (job_uuid, org2, scores[org2],datetime.datetime.utcnow()))

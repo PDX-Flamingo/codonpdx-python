@@ -17,6 +17,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
     # first count the codons in the file
     with open(json_name, 'w+') as json_file:
         count_input = type('', (), {})
+        count_input.job = job
         count_input.infile = file
         count_input.format = format
         count_input.pretty = False
@@ -28,6 +29,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         insert_input = type('', (), {})
         insert_input.infile = json_file
         insert_input.dbname = 'input'
+        insert_input.job = job
         input = codonpdx.insert.insert(insert_input)
 
     # do comparison and place into results table

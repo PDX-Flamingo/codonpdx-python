@@ -50,7 +50,7 @@ def ratio(organism, codon_table):
 def calc(args):
     with dbManager('config/db.cfg') as db:
         # do a comparison of virus 'NG_027788.1' with codon table 'standard'
-        scores = comparison(db, args.virus, args.virusdb,
+        scores = comparison(db, args.job, 'input',
                             args.dbname, 'standard')
         # output if requested
         if args.output:
