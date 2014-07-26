@@ -116,4 +116,4 @@ class dbManager:
                 "INSERT INTO results "
                 "(job_uuid,organism2,score,time) "
                 "VALUES (%s,%s,%s,%s,%s);",
-                (job_uuid, org2, scores[org2],datetime.datetime.utcnow()))
+                (job_uuid, org2, scores[org2], datetime.datetime.utcnow()))
