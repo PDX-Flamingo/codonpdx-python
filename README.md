@@ -23,17 +23,40 @@ Dependencies
 Usage
 -------
 
+### Mirror
 ```bash
-# generate codon count metadata for a file
+./codonpdx.py mirror -d refseq
+```
+
+### Count
+
+generate codon count metadata for a file
+
+```bash
 zcat ~/refseq/release/complete/complete.1.genomic.gbff.gz| ./codonpdx.py count -f genbank > /tmp/complete.1.json
+```
 
-# load count metadata into refseq
+### LoadDB
+
+load count metadata into refseq
+
+```bash
 cat /tmp/complete.1.json | ./codonpdx.py loadDB -d refseq
+```
 
-# calculate scores for NG_027788.1
+### calcScore
+
+calculate scores for NG_027788.1
+
+```bash
 ./codonpdx.py calcScore -d refseq -v NG_027788.1
+```
 
-# Run as celery worker process
+### Celery
+
+Run as celery worker process
+
+```bash
 celery -A codonpdx worker -l info
 ```
 
