@@ -8,7 +8,7 @@ from db import dbManager
 # insert an organism into a database table
 def insert(args):
     if args.json:
-        data = args.json
+        data = json.loads(args.json)
     else:
         data = json.load(args.infile)
     with dbManager('config/db.cfg') as db:

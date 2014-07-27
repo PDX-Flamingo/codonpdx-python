@@ -51,10 +51,17 @@ def parse_file(file, format, dbname):
 
     parse_args = type('', (), {})
     parse_args.infile = file
+    parse_args.output = False
     parse_args.format = format
     parse_args.dbname = dbname
-    parse_args.json = condonpdx.count.count(parse_args)
-    codonpdx.insert.insert(parse_args)
+    parse_args.gzip = True
+    parse_args.pretty = False
+    parse_args.job = None
+    parse_args.json = codonpdx.count.count(parse_args)
+
+    # If the file has sequences insert them
+    if parse_args.json:
+        codonpdx.insert.insert(parse_args)
 
     return file
 

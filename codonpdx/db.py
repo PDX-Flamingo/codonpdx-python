@@ -121,4 +121,4 @@ class dbManager:
     # clear data from a table
     # table: name of the table
     def truncateTable(self, table):
-        self.cur.execute("TRUNCATE " + table ";")
+        self.cur.execute("TRUNCATE " + table + ";")

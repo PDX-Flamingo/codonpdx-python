@@ -7,9 +7,9 @@ import codonpdx.db
 
 
 def queueJobs(args):
-    db = codonpdx.db.dbManager('config/db.cfg')
-    print "Truncating " + args.dbname + " before repopulating it."
-    db.truncateTable(args.dbname)
+    with codonpdx.db.dbManager('config/db.cfg') as db:
+        print "Truncating " + args.dbname + " before repopulating it."
+        db.truncateTable(args.dbname)
 
     config = ConfigParser.RawConfigParser()
     config.read('config/codonpdx.cfg')
