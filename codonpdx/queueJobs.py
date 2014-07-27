@@ -3,9 +3,14 @@ import glob
 import os
 
 from codonpdx.tasks import parse_file
+import codonpdx.db
 
 
 def queueJobs(args):
+    db = codonpdx.db.dbManager('config/db.cfg')
+    print "Truncating " + args.dbname + " before repopulating it."
+    db.truncateTable(args.dbname)
+
     config = ConfigParser.RawConfigParser()
     config.read('config/codonpdx.cfg')
     path = config.get(args.dbname, 'path')
