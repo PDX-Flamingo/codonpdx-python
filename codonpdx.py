@@ -28,6 +28,13 @@ parserCount.add_argument(
     help='A file containing sequence data.'
 )
 parserCount.add_argument(
+    '-j',
+    '--job',
+    required=True,
+    help='The UUID for the job if this process is placing its results into '
+         'the results table.'
+)
+parserCount.add_argument(
     '-f',
     '--format',
     choices=['fasta', 'genbank'],
@@ -69,6 +76,13 @@ parserLoadDB.add_argument(
     type=argparse.FileType('r'),
     default=sys.stdin,
     help='The file to to read the JSON data from. Defaults to standard input.'
+)
+parserLoadDB.add_argument(
+    '-j',
+    '--job',
+    required=True,
+    help='The UUID for the job if this process is placing its results into '
+         'the results table.'
 )
 parserLoadDB.set_defaults(
     func=codonpdx.insert.insert

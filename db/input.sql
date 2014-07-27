@@ -1,6 +1,6 @@
 CREATE TABLE input (
-    id character varying(100) NOT NULL,
-    name character text,
+    id character(32) NOT NULL,
+    taxonomy text,
     description text,
     aaa integer,
     aac integer,
@@ -65,5 +65,6 @@ CREATE TABLE input (
     tta integer,
     ttc integer,
     ttg integer,
-    ttt integer
+    ttt integer,
+    time timestamp
 );

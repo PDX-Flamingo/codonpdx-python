@@ -46,16 +46,17 @@ def count(args):
             # get taxonomy information
             tax = ""
             if 'taxonomy' in seq_record.annotations:
-                tax = ' '.join(seq_record.annotations['taxonomy'])
+                tax = '; '.join(seq_record.annotations['taxonomy'])
             # add the sequence information into our results
             data += [{
-                     # accession.version
-                     "id": seq_record.id,
-                     # taxonomy information
-                     "name": tax,
-                     "description": seq_record.description,
-                     "codoncount": getdict(cstruct)
-                     }]
+                # accession.version if we have a genbank file
+                # otherwise we should use the job uuid
+                "id": args.job if args.format == 'fasta' else seq_record.id,
+                # taxonomy information
+                "taxonomy": tax,
+                "description": seq_record.description,
+                "codoncount": getdict(cstruct)
+            }]
     # only write if data exists (i.e., we actually had sequence data
     if data:
         json = writeCounts(data, args.pretty)

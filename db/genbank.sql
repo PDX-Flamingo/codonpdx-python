@@ -1,6 +1,6 @@
 CREATE TABLE genbank (
-    id character varying(20) NOT NULL,
-    name character text,
+    id character varying(32) NOT NULL,
+    taxonomy text,
     description text,
     aaa integer,
     aac integer,
@@ -65,5 +65,6 @@ CREATE TABLE genbank (
     tta integer,
     ttc integer,
     ttg integer,
-    ttt integer
+    ttt integer,
+    time timestamp
 );

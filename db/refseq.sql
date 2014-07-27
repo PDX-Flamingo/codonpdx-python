@@ -1,6 +1,6 @@
 CREATE TABLE refseq (
     id character varying(20) NOT NULL,
-    name character text,
+    taxonomy text,
     description text,
     aaa integer,
     aac integer,
@@ -65,5 +65,6 @@ CREATE TABLE refseq (
     tta integer,
     ttc integer,
     ttg integer,
-    ttt integer
+    ttt integer,
+    time timestamp
 );
