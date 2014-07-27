@@ -53,8 +53,10 @@ def parse_file(file, format, dbname):
     parse_args.infile = file
     parse_args.format = format
     parse_args.dbname = dbname
-    # condonpdx.count.count(parse_args)
-    return True
+    parse_args.json = condonpdx.count.count(parse_args)
+    codonpdx.insert.insert(parse_args)
+
+    return file
 
 
 # Simple task to check if calls are working
