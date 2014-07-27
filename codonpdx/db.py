@@ -117,3 +117,8 @@ class dbManager:
                 "(job_uuid,organism2,score,time) "
                 "VALUES (%s,%s,%s,%s,%s);",
                 (job_uuid, org2, scores[org2], datetime.datetime.utcnow()))
+
+    # clear data from a table
+    # table: name of the table
+    def truncateTable(self, table):
+        self.cur.execute("TRUNCATE " + table + ";")

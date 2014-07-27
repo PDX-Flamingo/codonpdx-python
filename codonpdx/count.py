@@ -1,3 +1,4 @@
+import gzip
 import json
 import Bio
 import Bio.SeqIO
@@ -36,7 +37,12 @@ def count(args):
 
     data = []
 
-    for seq_record in Bio.SeqIO.parse(args.infile, args.format):
+    if args.gzip:
+        handle = gzip.open(args.infile)
+    else:
+        handle = args.infile
+
+    for seq_record in Bio.SeqIO.parse(handle, args.format):
         # only bother producing output if there is actual sequence data;
         # i.e., not all unknowns
         if len(seq_record.seq) != seq_record.seq.count("N"):
@@ -60,5 +66,6 @@ def count(args):
     # only write if data exists (i.e., we actually had sequence data
     if data:
         json = writeCounts(data, args.pretty)
-        args.output.write(json)
+        if args.output:
+            args.output.write(json)
         return json

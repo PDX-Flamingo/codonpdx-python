@@ -45,6 +45,27 @@ def trigger_demo_behavior(job, file, seqdb, format):
     return job
 
 
+@app.task
+def parse_file(file, format, dbname):
+    """Task to count codons and load them into the db"""
+
+    parse_args = type('', (), {})
+    parse_args.infile = file
+    parse_args.output = False
+    parse_args.format = format
+    parse_args.dbname = dbname
+    parse_args.gzip = True
+    parse_args.pretty = False
+    parse_args.job = None
+    parse_args.json = codonpdx.count.count(parse_args)
+
+    # If the file has sequences insert them
+    if parse_args.json:
+        codonpdx.insert.insert(parse_args)
+
+    return file
+
+
 # Simple task to check if calls are working
 @app.task
 def health_check():

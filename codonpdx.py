@@ -5,6 +5,7 @@ import codonpdx.calc
 import codonpdx.count
 import codonpdx.insert
 import codonpdx.mirror
+import codonpdx.queueJobs
 import sys
 
 # create the top-level parser
@@ -145,6 +146,29 @@ parserMirror.add_argument(
 
 parserMirror.set_defaults(
     func=codonpdx.mirror.mirror
+)
+
+# create the queueJobs subcommand
+parserQueueJobs = subparsers.add_parser(
+    'queueJobs',
+    help='Count and load repository codon counts into postgres'
+)
+parserQueueJobs.add_argument(
+    '-d',
+    '--dbname',
+    required=True,
+    choices=['refseq', 'genbank'],
+    help='The repository to parse'
+)
+parserQueueJobs.add_argument(
+    '-f',
+    '--format',
+    choices=['fasta', 'genbank'],
+    help='The file format.'
+)
+
+parserQueueJobs.set_defaults(
+    func=codonpdx.queueJobs.queueJobs
 )
 
 args = parser.parse_args()
