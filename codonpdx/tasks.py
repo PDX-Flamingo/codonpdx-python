@@ -21,6 +21,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         count_input.infile = file
         count_input.format = format
         count_input.pretty = False
+        count_input.gzip = False
         count_input.output = json_file
         json = codonpdx.count.count(count_input)
 
