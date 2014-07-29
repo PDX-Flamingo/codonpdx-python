@@ -59,4 +59,4 @@ def calc(args):
                 print scores[k], k
         # otherwise put in the results table
         else:
-            db.storeResults(args.virus, args.job, scores)
+            db.storeResults(args.job, scores)
