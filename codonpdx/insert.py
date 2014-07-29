@@ -7,9 +7,9 @@ from db import dbManager
 
 # insert an organism into a database table
 def insert(args):
-    if hasattr(args, 'json'):
+    try:
         data = json.loads(args.json)
-    else:
+    except AttributeError:
         data = json.load(args.infile)
     with dbManager('config/db.cfg') as db:
         for org in data:
