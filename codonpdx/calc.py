@@ -88,4 +88,4 @@ def calc(args):
             
         # otherwise put in the results table
         else:
-            db.storeResults(args.job, scores_calc)
+            db.storeResults(args.job, scores_calc[0], scores_calc[1])

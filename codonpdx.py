@@ -65,6 +65,7 @@ parserCount.add_argument(
 parserCount.add_argument(
     '-s',
     '--shuffle',
+    action='store_true',
     default=False,
     help='Indicates whether to generate a shuffled codon count'
 )
@@ -75,13 +76,29 @@ parserCount.set_defaults(
 # create the parser for the "insert" command
 parserLoadDB = subparsers.add_parser(
     'insert',
-    help='Insert organism codon count JSON information into the database.'
+    help='Insert organism codon count JSON information into a sequence database.'
 )
 parserLoadDB.add_argument(
     '-d',
     '--dbname',
-    choices=['refseq', 'genbank', 'input'],
+    choices=['refseq', 'genbank'],
     help='The database table to store the count information in.'
+)
+parserLoadDB.add_argument(
+    '-i',
+    '--infile',
+    nargs='?',
+    type=argparse.FileType('r'),
+    default=sys.stdin,
+    help='The file to to read the JSON data from. Defaults to standard input.'
+)
+parserLoadDB.set_defaults(
+    func=codonpdx.insert.insert
+)
+# create the parser for the "nsertInput" command
+parserLoadDB = subparsers.add_parser(
+    'insertInput',
+    help='Insert organism codon count JSON information into the input.'
 )
 parserLoadDB.add_argument(
     '-i',
@@ -99,9 +116,8 @@ parserLoadDB.add_argument(
          'the results table.'
 )
 parserLoadDB.set_defaults(
-    func=codonpdx.insert.insert
+    func=codonpdx.insert.insertinput
 )
-
 # create the parser for the "calc" command
 parserCalcScore = subparsers.add_parser(
     'calc',

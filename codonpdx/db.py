@@ -134,7 +134,7 @@ class dbManager:
     # results table
     # job_uuid: datetime of when the comparison started
     # scores: map from organism id -> comparison score
-    def storeResults(self, job_uuid, scores):
+    def storeResults(self, job_uuid, scores, shuffle_scores):
         for org2 in scores:
             self.cur.execute(
                 "INSERT INTO results "
@@ -142,8 +142,8 @@ class dbManager:
                 "VALUES (%s,%s,%s,%s,%s);",
                 (job_uuid,
                  org2,
-                 scores[0][org2],
-                 scores[1][org2],
+                 scores[org2],
+                 shuffle_scores[org2],
                  datetime.datetime.utcnow())
             )
 
