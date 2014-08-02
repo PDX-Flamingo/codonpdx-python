@@ -62,8 +62,9 @@ def count(args):
 
             if args.shuffle:
                 random.seed()
-                shufflesequence = \
-                    ''.join(random.sample(sequence, len(sequence)))
+                l = list(sequence)
+                random.shuffle(l)
+                shufflesequence = ''.join(l)
                 shufflestruct = \
                     counterc.countcodons(shufflesequence)
                 data += [{
