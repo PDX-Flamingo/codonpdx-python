@@ -17,13 +17,14 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
     scores = defaultdict(int)
     shuffle_scores = defaultdict(int)
     virus_ratio = ratio(virus, codon_table)
+    virus_shuffle_ratio = ratio_shuffe(virus, codon_table)
     for organism in db.getOrganisms(seq_db):
         organism_ratio = ratio(organism, codon_table)
         # calculate the score for the virus and this organism
-        for k in virus_ratio[0]:
-            scores[organism['id']] += abs(virus_ratio[0][k] - organism_ratio[k])
-        for k in virus_ratio[1]:
-            shuffle_scores[organism['id']] = abs(virus_ratio[1][k] - organism_ratio[k])
+        for k in virus_ratio:
+            scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
+        for k in virus_shuffle_ratio:
+            shuffle_scores[organism['id']] = abs(virus_shuffle_ratio[k] - organism_ratio[k])
     return [scores, shuffle_scores]
 
 
@@ -32,14 +33,11 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
 # codon_table: the codon table acquired from a dbManager
 def ratio(organism, codon_table):
     ratios = {}
-    shuffle_ratios = {}
     for acid, codons in codon_table:
         acid_total = 0
-        shuffle_acid_total = 0
         # calculate the total number of codons for the acid
         for codon in codons.split(" "):
             acid_total += int(organism[codon.lower()])
-            shuffle_acid_total += int(organism["shuffle_" + codon.lower()])
         # calculate the number of each individual codon
         for codon in codons.split(" "):
             # normal sequence codons
@@ -48,17 +46,30 @@ def ratio(organism, codon_table):
                 ratio_calc = codon_total / acid_total
             else:
                 ratio_calc = 0
-            # calculate the number of codons in the shuffle
-            shuffle_codon_total = int(organism["shuffle_" + codon.lower()])
-            if(shuffle_codon_total != 0):
-                shuffle_ratio_calc = shuffle_codon_total / shuffle_acid_total
-            else:
-                shuffle_ratio_calc = 0
             # ratio for this codon
             ratios[codon] = ratio_calc
-            # ratio for this codon in the shuffle sequence
-            shuffle_ratios[codon.lower()] = shuffle_ratio_calc
-    return [ratios, shuffle_ratios]
+    return ratios
+
+
+# as shuffle(), but for organisms with shuffle fields
+def ratio_shuffle(organism, codon_table):
+    ratios = {}
+    for acid, codons in codon_table:
+        acid_total = 0
+        # calculate the total number of codons for the acid
+        for codon in codons.split(" "):
+            acid_total += int(organism["shuffle_" + codon.lower()])
+        # calculate the number of each individual codon
+        for codon in codons.split(" "):
+            # normal sequence codons
+            codon_total = int(organism["shuffle_" + codon.lower()])
+            if(codon_total != 0):
+                ratio_calc = codon_total / acid_total
+            else:
+                ratio_calc = 0
+            # ratio for this codon
+            ratios[codon] = ratio_calc
+    return ratios
 
 
 def calc(args):
