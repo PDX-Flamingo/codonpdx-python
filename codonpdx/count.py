@@ -92,5 +92,5 @@ def count(args):
     if data:
         outputjson = writecounts(data, args.pretty)
         if args.output:
-            args.output.write(json)
+            args.output.write(outputjson)
         return outputjson

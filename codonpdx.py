@@ -62,6 +62,12 @@ parserCount.add_argument(
     default=sys.stdout,
     help='Where to place the output JSON.'
 )
+parserCount.add_argument(
+    '-s',
+    '--shuffle',
+    default=False,
+    help='Indicates whether to generate a shuffled codon count'
+)
 parserCount.set_defaults(
     func=codonpdx.count.count
 )
