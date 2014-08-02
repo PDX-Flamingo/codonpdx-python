@@ -35,6 +35,7 @@ def ratio(organism, codon_table):
     shuffle_ratios = {}
     for acid, codons in codon_table:
         acid_total = 0
+        shuffle_acid_total = 0
         # calculate the total number of codons for the acid
         for codon in codons.split(" "):
             acid_total += int(organism[codon.lower()])
