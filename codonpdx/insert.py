@@ -25,5 +25,5 @@ def insertinput(args):
         data = json.load(args.infile)
     with dbManager('config/db.cfg') as db:
         for org in data:
-            db.insertInputOrganism(org, args.dbname, args.job)
+            db.insertInputOrganism(org, args.job)
     return data
