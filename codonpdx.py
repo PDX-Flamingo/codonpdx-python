@@ -30,7 +30,7 @@ parserCount.add_argument(
 )
 parserCount.add_argument(
     '-g',
-    '--gzipped',
+    '--gzip',
     action='store_true',
     default=False,
     help='Indicates the input is gzipped.'
