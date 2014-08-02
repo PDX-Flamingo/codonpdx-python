@@ -141,7 +141,7 @@ class dbManager:
             self.cur.execute(
                 "INSERT INTO results "
                 "(job_uuid,organism2,score,time) "
-                "VALUES (%s,%s,%s,%s,%s);",
+                "VALUES (%s,%s,%s,%s);",
                 (job_uuid, org2, scores[org2], datetime.datetime.utcnow()))
 
     # clear data from a table

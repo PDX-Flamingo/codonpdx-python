@@ -29,6 +29,13 @@ parserCount.add_argument(
     help='A file containing sequence data.'
 )
 parserCount.add_argument(
+    '-g',
+    '--gzip',
+    action='store_true',
+    default=False,
+    help='Indicates the input is gzipped.'
+)
+parserCount.add_argument(
     '-j',
     '--job',
     required=True,

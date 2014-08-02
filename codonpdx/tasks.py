@@ -29,6 +29,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
     # put json into database
     with open(json_name, 'r') as json_file:
         insert_input = type('', (), {})
+        insert_input.json = ""
         insert_input.infile = json_file
         insert_input.dbname = 'input'
         insert_input.job = job
