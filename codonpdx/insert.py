@@ -19,7 +19,7 @@ def insert(args):
 
 # insert an organism into a database table
 def insertinput(args):
-    if hasattr(args, 'json'):
+    if hasattr(args, 'json') and args.json:
         data = json.loads(args.json)
     else:
         data = json.load(args.infile)
