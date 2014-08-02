@@ -24,7 +24,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         count_input.gzip = False
         count_input.output = json_file
         count_input.shuffle = True
-        json = codonpdx.count.count(count_input)
+        codonpdx.count.count(count_input)
 
     # put json into database
     with open(json_name, 'r') as json_file:
@@ -32,7 +32,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         insert_input.infile = json_file
         insert_input.dbname = 'input'
         insert_input.job = job
-        input = codonpdx.insert.insert(insert_input)
+        input = codonpdx.insert.insertInput(insert_input)
 
     # do comparison and place into results table
     calc_input = type('', (), {})

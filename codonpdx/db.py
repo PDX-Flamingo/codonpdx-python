@@ -106,6 +106,32 @@ class dbManager:
         vals += ");"
         self.cur.execute(insert + cols + vals, tuple(data))
 
+    # insert an organism into a table
+    # org: dictionary describing the organism
+    # table: what table to insert the organism into
+    # job: the job uuid; used in the case of inserting into input
+    def insertInputOrganism(self, org, table, job):
+        insert = "INSERT INTO " + table + " "
+        cols = "(id, taxonomy, description, time"
+        vals = "VALUES (%s, %s, %s, %s"
+        data = [
+            org['id'] if table != 'input' else job,
+            org['taxonomy'],
+            org['description'],
+            datetime.datetime.utcnow()
+        ]
+        for codon, count in org['codoncount'].iteritems():
+            cols += ", " + codon
+            vals += ", %s"
+            data.append(count)
+        for shuffle_codon, count in org['shufflecodoncount'].iteritems():
+            cols += ", " + "shuffle_" + shuffle_codon
+            vals += ", %s"
+            data.append(count)
+        cols += ") "
+        vals += ");"
+        self.cur.execute(insert + cols + vals, tuple(data))
+
     # take the results of a comparison operation and store them in the
     # results table
     # job_uuid: datetime of when the comparison started
