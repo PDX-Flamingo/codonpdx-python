@@ -48,6 +48,7 @@ def count(args):
         if len(seq_record.seq) != seq_record.seq.count("N"):
             # count the codons and put them in the data object along with
             # other metadata
+<<<<<<< Updated upstream
             cstruct = counterc.countcodons(str(seq_record.seq))
             # get taxonomy information
             tax = ""
@@ -63,6 +64,22 @@ def count(args):
                 "description": seq_record.description,
                 "codoncount": getdict(cstruct)
             }]
+=======
+            sequence = str(seq_record.seq)
+            shufflesequence = ''.join(random.sample(sequence, len(sequence)))
+            cstruct = counterc.countcodons(sequence)
+            shufflestruct = counterc.countcodons(shufflesequence)
+            data += [{
+                     "id": seq_record.id,
+                     "name": seq_record.name,
+                     "description": seq_record.description,
+                     "annotations": str(seq_record.annotations),
+                     "features": str(seq_record.features),
+                     "dbxrefs": seq_record.dbxrefs,
+                     "codoncount": getdict(cstruct),
+                     "shufflecount": getdict(shufflestruct)
+                     }]
+>>>>>>> Stashed changes
     # only write if data exists (i.e., we actually had sequence data
     if data:
         json = writeCounts(data, args.pretty)
