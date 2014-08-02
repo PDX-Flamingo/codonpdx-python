@@ -10,6 +10,6 @@ install:
 # command to run tests
 script: 
   - "python --version"
-  - "pep8 *.py"
-  - "pep8 codonpdx/*.py"
+  - "flake8 *.py"
+  - "flake8 codonpdx/*.py"
   - "nosetests"

@@ -2,7 +2,6 @@
 
 from __future__ import division
 from collections import defaultdict
-import sys
 from db import dbManager
 
 

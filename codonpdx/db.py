@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import division
-from collections import defaultdict
 import ConfigParser
-import sys
 import psycopg2cffi
 import psycopg2cffi.extras
 import datetime
