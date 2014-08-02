@@ -38,7 +38,7 @@ def count(args):
     data = []
 
     if args.gzip:
-        handle = gzip.open(args.infile)
+        handle = gzip.GzipFile(fileobj=args.infile)
     else:
         handle = args.infile
 
