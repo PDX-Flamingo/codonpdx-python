@@ -24,7 +24,8 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
         for k in virus_ratio:
             scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
         for k in virus_shuffle_ratio:
-            shuffle_scores[organism['id']] += abs(virus_shuffle_ratio[k] - organism_ratio[k])
+            shuffle_scores[organism['id']] += \
+                abs(virus_shuffle_ratio[k] - organism_ratio[k])
     return [scores, shuffle_scores]
 
 
@@ -85,7 +86,6 @@ def calc(args):
             print "Shuffle scores for " + args.virus + " versus " + args.dbname
             for k in sorted(scores_calc[1], key=scores_calc[1].get):
                 print scores_calc[1][k], k
-            
         # otherwise put in the results table
         else:
             db.storeResults(args.job, scores_calc[0], scores_calc[1])

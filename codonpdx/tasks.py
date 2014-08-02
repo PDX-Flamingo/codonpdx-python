@@ -4,9 +4,7 @@ import codonpdx.count
 import codonpdx.insert
 import codonpdx.calc
 
-from time import sleep
 from codonpdx.celery import app
-from random import randint, uniform
 
 
 # CodonPDX TASK Methods
