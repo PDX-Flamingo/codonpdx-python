@@ -3,7 +3,7 @@ import json
 import Bio
 import Bio.SeqIO
 
-from ctypes import *
+from ctypes import CDLL, c_char_p
 from CodonCountStruct import CodonCount
 
 

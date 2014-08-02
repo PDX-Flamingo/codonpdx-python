@@ -4,9 +4,7 @@ import codonpdx.count
 import codonpdx.insert
 import codonpdx.calc
 
-from time import sleep
 from codonpdx.celery import app
-from random import randint, uniform
 
 
 # CodonPDX TASK Methods
@@ -23,7 +21,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         count_input.pretty = False
         count_input.gzip = False
         count_input.output = json_file
-        json = codonpdx.count.count(count_input)
+        codonpdx.count.count(count_input)
 
     # put json into database
     with open(json_name, 'r') as json_file:
