@@ -76,7 +76,8 @@ parserCount.set_defaults(
 # create the parser for the "insert" command
 parserLoadDB = subparsers.add_parser(
     'insert',
-    help='Insert organism codon count JSON information into a sequence database.'
+    help='Insert organism codon count JSON information into a sequence '
+         'database.'
 )
 parserLoadDB.add_argument(
     '-d',

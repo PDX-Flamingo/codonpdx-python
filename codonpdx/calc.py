@@ -24,7 +24,7 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
         for k in virus_ratio:
             scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
         for k in virus_shuffle_ratio:
-            shuffle_scores[organism['id']] = abs(virus_shuffle_ratio[k] - organism_ratio[k])
+            shuffle_scores[organism['id']] += abs(virus_shuffle_ratio[k] - organism_ratio[k])
     return [scores, shuffle_scores]
 
 
@@ -42,7 +42,7 @@ def ratio(organism, codon_table):
         for codon in codons.split(" "):
             # normal sequence codons
             codon_total = int(organism[codon.lower()])
-            if(codon_total != 0):
+            if codon_total != 0:
                 ratio_calc = codon_total / acid_total
             else:
                 ratio_calc = 0
@@ -63,7 +63,7 @@ def ratio_shuffle(organism, codon_table):
         for codon in codons.split(" "):
             # normal sequence codons
             codon_total = int(organism["shuffle_" + codon.lower()])
-            if(codon_total != 0):
+            if codon_total != 0:
                 ratio_calc = codon_total / acid_total
             else:
                 ratio_calc = 0
