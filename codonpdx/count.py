@@ -61,6 +61,7 @@ def count(args):
                 tax = '; '.join(seq_record.annotations['taxonomy'])
 
             if args.shuffle:
+                random.seed()
                 shufflesequence = \
                     ''.join(random.sample(sequence, len(sequence)))
                 shufflestruct = \
