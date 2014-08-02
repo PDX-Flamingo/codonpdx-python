@@ -16,16 +16,36 @@ pip install -r requirements.txt
 make
 ```
 
-Dependencies
------
-* [BioPython](http://biopython.org) 
+Configuration
+-------------
+
+There are several configuration files that need to be configured before use.
+
+Sample configuration files are provided for the following:
+
+config/db.cfg
+config/mirror.cfg
+config/codonpdx.cfg
+codonpdx/celeryconfig.py
 
 Usage
 -------
 
 ### Mirror
+
+Mirror refseq or genbank to local disk.
+
 ```bash
 ./codonpdx.py mirror -d refseq
+```
+
+### queueJobs
+
+One or more celery workers must be running before running this. This command
+will count codon count data and insert it into to the database.
+
+```bash
+./codonpdx queueJobs -d {refseq,genbank} -f {fasta,genbank}
 ```
 
 ### Count
@@ -36,25 +56,25 @@ generate codon count metadata for a file
 zcat ~/refseq/release/complete/complete.1.genomic.gbff.gz| ./codonpdx.py count -f genbank > /tmp/complete.1.json
 ```
 
-### LoadDB
+### Insert
 
 load count metadata into refseq
 
 ```bash
-cat /tmp/complete.1.json | ./codonpdx.py loadDB -d refseq
+cat /tmp/complete.1.json | ./codonpdx.py insert -d refseq
 ```
 
-### calcScore
+### Calc
 
 calculate scores for NG_027788.1
 
 ```bash
-./codonpdx.py calcScore -d refseq -v NG_027788.1
+./codonpdx.py calc -d refseq -v NG_027788.1
 ```
 
-### Celery
+### Starting a celery worker
 
-Run as celery worker process
+This will start a celery worker which is used by the webapp and mirror command.
 
 ```bash
 celery -A codonpdx worker -l info
