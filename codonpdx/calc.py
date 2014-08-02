@@ -17,7 +17,7 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
     scores = defaultdict(int)
     shuffle_scores = defaultdict(int)
     virus_ratio = ratio(virus, codon_table)
-    virus_shuffle_ratio = ratio_shuffe(virus, codon_table)
+    virus_shuffle_ratio = ratio_shuffle(virus, codon_table)
     for organism in db.getOrganisms(seq_db):
         organism_ratio = ratio(organism, codon_table)
         # calculate the score for the virus and this organism
