@@ -12,4 +12,5 @@ script:
   - "python --version"
   - "flake8 *.py"
   - "flake8 codonpdx/*.py"
+  - "flake8 tests/"
   - "nosetests"

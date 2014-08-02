@@ -1,8 +1,8 @@
 """ Unit Tests for CounterC """
 
-from ctypes import *
+from ctypes import CDLL, c_char_p
 from codonpdx.CodonCountStruct import CodonCount
-from nose.tools import ok_, eq_, istest
+from nose.tools import eq_, istest
 
 
 def getdict(struct):
