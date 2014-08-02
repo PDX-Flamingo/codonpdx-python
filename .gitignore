@@ -2,6 +2,7 @@
 config/db.cfg
 config/mirror.cfg
 config/codonpdx.cfg
+codonpdx/celeryconfig.py
 
 # sequence files
 *.gb
