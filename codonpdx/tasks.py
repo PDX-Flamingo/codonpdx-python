@@ -23,6 +23,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         count_input.pretty = False
         count_input.gzip = False
         count_input.output = json_file
+        count_input.shuffle = True
         json = codonpdx.count.count(count_input)
 
     # put json into database

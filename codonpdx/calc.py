@@ -2,7 +2,6 @@
 
 from __future__ import division
 from collections import defaultdict
-import sys
 from db import dbManager
 
 
@@ -39,24 +38,24 @@ def ratio(organism, codon_table):
         for codon in codons.split(" "):
             codon_total = int(organism[codon.lower()])
             if(codon_total != 0):
-                ratio = codon_total / acid_total
+                ratio_calc = codon_total / acid_total
             else:
-                ratio = 0
+                ratio_calc = 0
             # store ratio for this codon
-            ratios[codon] = ratio
+            ratios[codon] = ratio_calc
     return ratios
 
 
 def calc(args):
     with dbManager('config/db.cfg') as db:
         # do a comparison of virus 'NG_027788.1' with codon table 'standard'
-        scores = comparison(db, args.job, 'input',
-                            args.dbname, 'standard')
+        scores_calc = comparison(db, args.job, 'input',
+                                 args.dbname, 'standard')
         # output if requested
         if args.output:
             print "Scores for " + args.virus + " versus " + args.dbname
-            for k in sorted(scores, key=scores.get):
-                print scores[k], k
+            for k in sorted(scores_calc, key=scores_calc.get):
+                print scores_calc[k], k
         # otherwise put in the results table
         else:
-            db.storeResults(args.job, scores)
+            db.storeResults(args.job, scores_calc)
