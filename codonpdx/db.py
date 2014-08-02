@@ -84,16 +84,15 @@ class dbManager:
                          (kind,))
         return self.cur.fetchall()
 
-    # insert an organism into a table
+    # insert an organism into a sequence database table
     # org: dictionary describing the organism
     # table: what table to insert the organism into
-    # job: the job uuid; used in the case of inserting into input
-    def insertOrganism(self, org, table, job):
+    def insertOrganism(self, org, table):
         insert = "INSERT INTO " + table + " "
         cols = "(id, taxonomy, description, time"
         vals = "VALUES (%s, %s, %s, %s"
         data = [
-            org['id'] if table != 'input' else job,
+            org['id'],
             org['taxonomy'],
             org['description'],
             datetime.datetime.utcnow()
@@ -106,16 +105,15 @@ class dbManager:
         vals += ");"
         self.cur.execute(insert + cols + vals, tuple(data))
 
-    # insert an organism into a table
+    # insert an organism's counts into the input table
     # org: dictionary describing the organism
-    # table: what table to insert the organism into
     # job: the job uuid; used in the case of inserting into input
-    def insertInputOrganism(self, org, table, job):
-        insert = "INSERT INTO " + table + " "
+    def insertInputOrganism(self, org, job):
+        insert = "INSERT INTO input "
         cols = "(id, taxonomy, description, time"
         vals = "VALUES (%s, %s, %s, %s"
         data = [
-            org['id'] if table != 'input' else job,
+            job,
             org['taxonomy'],
             org['description'],
             datetime.datetime.utcnow()
@@ -140,9 +138,14 @@ class dbManager:
         for org2 in scores:
             self.cur.execute(
                 "INSERT INTO results "
-                "(job_uuid,organism2,score,time) "
-                "VALUES (%s,%s,%s,%s);",
-                (job_uuid, org2, scores[org2], datetime.datetime.utcnow()))
+                "(job_uuid,organism2,score,shuffle_score,time) "
+                "VALUES (%s,%s,%s,%s,%s);",
+                (job_uuid,
+                 org2,
+                 scores[0][org2],
+                 scores[1][org2],
+                 datetime.datetime.utcnow())
+            )
 
     # clear data from a table
     # table: name of the table
