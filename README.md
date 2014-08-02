@@ -23,10 +23,10 @@ There are several configuration files that need to be configured before use.
 
 Sample configuration files are provided for the following:
 
-config/db.cfg
-config/mirror.cfg
-config/codonpdx.cfg
-codonpdx/celeryconfig.py
+* config/db.cfg
+* config/mirror.cfg
+* config/codonpdx.cfg
+* codonpdx/celeryconfig.py
 
 Usage
 -------
