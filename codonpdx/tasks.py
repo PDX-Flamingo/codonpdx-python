@@ -32,7 +32,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
         insert_input.infile = json_file
         insert_input.dbname = 'input'
         insert_input.job = job
-        input = codonpdx.insert.insertInput(insert_input)
+        input = codonpdx.insert.insertinput(insert_input)
 
     # do comparison and place into results table
     calc_input = type('', (), {})

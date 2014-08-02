@@ -16,8 +16,9 @@ def insert(args):
             db.insertOrganism(org, args.dbname, args.job)
     return data
 
+
 # insert an organism into a database table
-def insertInput(args):
+def insertinput(args):
     if args.json:
         data = json.loads(args.json)
     else:
