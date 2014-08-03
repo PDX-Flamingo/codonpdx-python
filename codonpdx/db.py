@@ -82,16 +82,15 @@ class dbManager:
                          (kind,))
         return self.cur.fetchall()
 
-    # insert an organism into a table
+    # insert an organism into a sequence database table
     # org: dictionary describing the organism
     # table: what table to insert the organism into
-    # job: the job uuid; used in the case of inserting into input
-    def insertOrganism(self, org, table, job):
+    def insertOrganism(self, org, table):
         insert = "INSERT INTO " + table + " "
         cols = "(id, taxonomy, description, time"
         vals = "VALUES (%s, %s, %s, %s"
         data = [
-            org['id'] if table != 'input' else job,
+            org['id'],
             org['taxonomy'],
             org['description'],
             datetime.datetime.utcnow()
@@ -104,17 +103,47 @@ class dbManager:
         vals += ");"
         self.cur.execute(insert + cols + vals, tuple(data))
 
+    # insert an organism's counts into the input table
+    # org: dictionary describing the organism
+    # job: the job uuid; used in the case of inserting into input
+    def insertInputOrganism(self, org, job):
+        insert = "INSERT INTO input "
+        cols = "(id, taxonomy, description, time"
+        vals = "VALUES (%s, %s, %s, %s"
+        data = [
+            job,
+            org['taxonomy'],
+            org['description'],
+            datetime.datetime.utcnow()
+        ]
+        for codon, count in org['codoncount'].iteritems():
+            cols += ", " + codon
+            vals += ", %s"
+            data.append(count)
+        for shuffle_codon, count in org['shufflecodoncount'].iteritems():
+            cols += ", " + "shuffle_" + shuffle_codon
+            vals += ", %s"
+            data.append(count)
+        cols += ") "
+        vals += ");"
+        self.cur.execute(insert + cols + vals, tuple(data))
+
     # take the results of a comparison operation and store them in the
     # results table
     # job_uuid: datetime of when the comparison started
     # scores: map from organism id -> comparison score
-    def storeResults(self, job_uuid, scores):
+    def storeResults(self, job_uuid, scores, shuffle_scores):
         for org2 in scores:
             self.cur.execute(
                 "INSERT INTO results "
-                "(job_uuid,organism2,score,time) "
+                "(job_uuid,organism2,score,shuffle_score,time) "
                 "VALUES (%s,%s,%s,%s,%s);",
-                (job_uuid, org2, scores[org2], datetime.datetime.utcnow()))
+                (job_uuid,
+                 org2,
+                 scores[org2],
+                 shuffle_scores[org2],
+                 datetime.datetime.utcnow())
+            )
 
     # clear data from a table
     # table: name of the table
