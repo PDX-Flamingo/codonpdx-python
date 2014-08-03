@@ -63,6 +63,8 @@ def count(args):
             if args.shuffle:
                 random.seed()
                 l = list(sequence)
+                letter = l.pop(0)
+                l.append(letter)
                 random.shuffle(l)
                 shufflesequence = ''.join(l)
                 shufflestruct = \
