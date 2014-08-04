@@ -34,10 +34,6 @@ class dbManager:
             cursor_factory=psycopg2cffi.extras.DictCursor
         )
 
-    # on garbage collect, close connections if the user forgot to do so
-    def __del__(self):
-        self.close()
-
     # for with-as statements; do nothing special on entry
     def __enter__(self):
         return self
