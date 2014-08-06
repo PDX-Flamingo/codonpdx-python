@@ -52,7 +52,7 @@ def count(args):
             # count the codons and put them in the data object along with
             # other metadata
 
-            sequence = str(seq_record.seq)
+            sequence = str(seq_record.seq).upper()
             cstruct = counterc.countcodons(sequence)
 
             # get taxonomy information
