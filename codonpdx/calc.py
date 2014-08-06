@@ -18,7 +18,7 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
     shuffle_scores = defaultdict(int)
     virus_ratio = ratio(virus, codon_table)
     virus_shuffle_ratio = ratio_shuffle(virus, codon_table)
-    for organism in db.getOrganisms(seq_db):
+    for organism in db.getOrganisms(seq_db, None):
         organism_ratio = ratio(organism, codon_table)
         # calculate the score for the virus and this organism
         for k in virus_ratio:
@@ -40,7 +40,7 @@ def comparison_list(db, virus_name, virus_db, ids, seq_db, codon_table_name):
     # this portion is the only changed part; get subset instead of everything
     # maybe consider passing None as the id list and getting everything in
     # case so we don't have to have a whole separate method for this option
-    for organism in db.getOrganismSubset(ids, seq_db):
+    for organism in db.getOrganisms(seq_db, ids):
         organism_ratio = ratio(organism, codon_table)
         # calculate the score for the virus and this organism
         for k in virus_ratio:
@@ -98,7 +98,7 @@ def ratio_shuffle(organism, codon_table):
 def calc(args):
     with dbManager('config/db.cfg') as db:
         # do custom list comparison if we have an id list
-        if hasattr(args, 'ids'):
+        if hasattr(args, 'ids') and args.ids:
             scores_calc = comparison_list(db, args.job, 'input',
                                           args.ids, args.dbname, 'standard')
         else:

@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import codonpdx.count
 import codonpdx.insert
 import codonpdx.calc
+import json
 
 from codonpdx.celery import app
 
@@ -37,7 +38,7 @@ def insert_input(job, file, format):
 
 # CodonPDX TASK Methods
 @app.task
-def compare_all(job, file, seqdb, format):
+def create_result_from_input_file(job, file, seqdb, format, subset):
     input = insert_input(job, file, format)
 
     # do comparison and place into results table
@@ -48,25 +49,10 @@ def compare_all(job, file, seqdb, format):
     calc_input.output = False
     calc_input.job = job
     calc_input.dbname = seqdb
-    codonpdx.calc.calc(calc_input)
-
-    return job
-
-
-@app.task
-def compare_list(job, file, ids, seqdb, format):
-    input = insert_input(job, file, format)
-
-    # passing the ids list will do a custom list compare instead of comparing
-    # against the whole table
-    calc_input = type('', (), {})
-    # use the first sequence in the file
-    calc_input.virus = input[0]['id']
-    calc_input.virusdb = 'input'
-    calc_input.output = False
-    calc_input.job = job
-    calc_input.ids = ids
-    calc_input.dbname = seqdb
+    if subset:
+        calc_input.ids = json.loads(subset)
+    else:
+        calc_input.ids = None
     codonpdx.calc.calc(calc_input)
 
     return job
