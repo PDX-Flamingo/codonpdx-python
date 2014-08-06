@@ -24,7 +24,7 @@ parserCount.add_argument(
     '-i',
     '--infile',
     nargs='?',
-    type=argparse.FileType('r'),
+    type=argparse.FileType('rU'),
     default=sys.stdin,
     help='A file containing sequence data.'
 )
