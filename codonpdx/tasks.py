@@ -7,9 +7,8 @@ import codonpdx.calc
 from codonpdx.celery import app
 
 
-# CodonPDX TASK Methods
-@app.task
-def trigger_demo_behavior(job, file, seqdb, format):
+# helper method to perform insertion of user file into the input table
+def insert_input(job, file, format):
     json_name = '/tmp/codonpdx_' + job + '.json'
 
     # first count the codons in the file
@@ -33,6 +32,14 @@ def trigger_demo_behavior(job, file, seqdb, format):
         insert_input.job = job
         input = codonpdx.insert.insertinput(insert_input)
 
+    return input
+
+
+# CodonPDX TASK Methods
+@app.task
+def compare_all(job, file, seqdb, format):
+    input = insert_input(job, file, format)
+
     # do comparison and place into results table
     calc_input = type('', (), {})
     # use the first sequence in the file
@@ -40,6 +47,25 @@ def trigger_demo_behavior(job, file, seqdb, format):
     calc_input.virusdb = 'input'
     calc_input.output = False
     calc_input.job = job
+    calc_input.dbname = seqdb
+    codonpdx.calc.calc(calc_input)
+
+    return job
+
+
+@app.task
+def compare_list(job, file, ids, seqdb, format):
+    input = insert_input(job, file, format)
+
+    # passing the ids list will do a custom list compare instead of comparing
+    # against the whole table
+    calc_input = type('', (), {})
+    # use the first sequence in the file
+    calc_input.virus = input[0]['id']
+    calc_input.virusdb = 'input'
+    calc_input.output = False
+    calc_input.job = job
+    calc_input.ids = ids
     calc_input.dbname = seqdb
     codonpdx.calc.calc(calc_input)
 

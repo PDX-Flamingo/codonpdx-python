@@ -29,6 +29,28 @@ def comparison(db, virus_name, virus_db, seq_db, codon_table_name):
     return [scores, shuffle_scores]
 
 
+# same as above but takes a list of accession ids to use from the table
+def comparison_list(db, virus_name, virus_db, ids, seq_db, codon_table_name):
+    virus = db.getOrganism(virus_name, virus_db)
+    codon_table = db.getCodonTable(codon_table_name)
+    scores = defaultdict(int)
+    shuffle_scores = defaultdict(int)
+    virus_ratio = ratio(virus, codon_table)
+    virus_shuffle_ratio = ratio_shuffle(virus, codon_table)
+    # this portion is the only changed part; get subset instead of everything
+    # maybe consider passing None as the id list and getting everything in
+    # case so we don't have to have a whole separate method for this option
+    for organism in db.getOrganismSubset(ids, seq_db):
+        organism_ratio = ratio(organism, codon_table)
+        # calculate the score for the virus and this organism
+        for k in virus_ratio:
+            scores[organism['id']] += abs(virus_ratio[k] - organism_ratio[k])
+        for k in virus_shuffle_ratio:
+            shuffle_scores[organism['id']] += \
+                abs(virus_shuffle_ratio[k] - organism_ratio[k])
+    return [scores, shuffle_scores]
+
+
 # calculate the ratios for a given organism using a certain codon table
 # organism: the organism; needs be a dict that can map codon triplets to counts
 # codon_table: the codon table acquired from a dbManager
@@ -75,9 +97,13 @@ def ratio_shuffle(organism, codon_table):
 
 def calc(args):
     with dbManager('config/db.cfg') as db:
-        # do a comparison of virus 'NG_027788.1' with codon table 'standard'
-        scores_calc = comparison(db, args.job, 'input',
-                                 args.dbname, 'standard')
+        # do custom list comparison if we have an id list
+        if hasattr(args, 'ids'):
+            scores_calc = comparison_list(db, args.job, 'input',
+                                          args.ids, args.dbname, 'standard')
+        else:
+            scores_calc = comparison(db, args.job, 'input',
+                                     args.dbname, 'standard')
         # output if requested
         if args.output:
             print "Scores for " + args.virus + " versus " + args.dbname

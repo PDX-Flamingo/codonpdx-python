@@ -65,6 +65,21 @@ class dbManager:
         self.cur.execute("SELECT * FROM "+source+";")
         return self.cur.fetchall()
 
+    # as above: get organisms from a database, but only if they are on a list
+    # ids: the list of accession ids to get
+    # source: where to get them from
+    def getOrganismSubset(self, ids, source):
+        id_list = ""
+        for id in ids:
+            id_list += " or id='" + id + "'"
+        # in the case that we do have ids in the list, we need to make the
+        # disjunction syntactically valid (as it is, it starts with "or")
+        # adding the empty disjunction to the front works for both cases
+        # (empty string because of an empty id list or a partial disjunction)
+        id_list = "false" + id_list
+        self.cur.execute("SELECT * FROM "+source+" WHERE "+ids+";")
+        return self.cur.fetchall()
+
     # get a codon <-> acid translation table
     # kind: the name of the table to acquire
     #  This string is used directly in the query and needs to be safe
