@@ -49,10 +49,7 @@ def create_result_from_input_file(job, file, seqdb, format, subset):
     calc_input.output = False
     calc_input.job = job
     calc_input.dbname = seqdb
-    if subset:
-        calc_input.ids = json.loads(subset)
-    else:
-        calc_input.ids = None
+    calc_input.ids = subset
     codonpdx.calc.calc(calc_input)
 
     return job
