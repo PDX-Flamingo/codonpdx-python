@@ -61,8 +61,24 @@ class dbManager:
     # acuqire all the organisms from a sequence database
     # source: the name of the sequence database (e.g., 'refseq')
     #  This string is used directly in the query and needs to be safe
-    def getOrganisms(self, source):
-        self.cur.execute("SELECT * FROM "+source+";")
+    # ids: a sequence of ids that are to be retrieved
+    def getOrganisms(self, source, ids):
+        if ids:
+            id_list = ""
+            for id in ids:
+                id_list += " or id='" + id + "'"
+            # in the case that we do have ids in the list, we need to make the
+            # disjunction syntactically valid (as it is, it starts with "or")
+            # adding the empty disjunction to the front works for both cases
+            # (empty string because of an empty id list or a partial
+            # disjunction)
+            id_list = "false" + id_list
+        else:
+            # in the case where we want everything, true will work without
+            # needing to change the query
+            id_list = "true"
+        # actually do the query and return the results
+        self.cur.execute("SELECT * FROM "+source+" WHERE "+id_list+";")
         return self.cur.fetchall()
 
     # get a codon <-> acid translation table

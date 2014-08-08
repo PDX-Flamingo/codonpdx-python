@@ -7,9 +7,8 @@ import codonpdx.calc
 from codonpdx.celery import app
 
 
-# CodonPDX TASK Methods
-@app.task
-def trigger_demo_behavior(job, file, seqdb, format):
+# helper method to perform insertion of user file into the input table
+def insert_input(job, file, format):
     json_name = '/tmp/codonpdx_' + job + '.json'
 
     # first count the codons in the file
@@ -33,6 +32,14 @@ def trigger_demo_behavior(job, file, seqdb, format):
         insert_input.job = job
         input = codonpdx.insert.insertinput(insert_input)
 
+    return input
+
+
+# CodonPDX TASK Methods
+@app.task
+def create_result_from_input_file(job, file, seqdb, format, subset):
+    input = insert_input(job, file, format)
+
     # do comparison and place into results table
     calc_input = type('', (), {})
     # use the first sequence in the file
@@ -41,6 +48,7 @@ def trigger_demo_behavior(job, file, seqdb, format):
     calc_input.output = False
     calc_input.job = job
     calc_input.dbname = seqdb
+    calc_input.ids = subset
     codonpdx.calc.calc(calc_input)
 
     return job
