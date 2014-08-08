@@ -61,7 +61,7 @@ class dbManager:
     # acuqire all the organisms from a sequence database
     # source: the name of the sequence database (e.g., 'refseq')
     #  This string is used directly in the query and needs to be safe
-    # ids: a sequence of 
+    # ids: a sequence of ids that are to be retrieved
     def getOrganisms(self, source, ids):
         if ids:
             id_list = ""
@@ -70,7 +70,8 @@ class dbManager:
             # in the case that we do have ids in the list, we need to make the
             # disjunction syntactically valid (as it is, it starts with "or")
             # adding the empty disjunction to the front works for both cases
-            # (empty string because of an empty id list or a partial disjunction)
+            # (empty string because of an empty id list or a partial
+            # disjunction)
             id_list = "false" + id_list
         else:
             # in the case where we want everything, true will work without

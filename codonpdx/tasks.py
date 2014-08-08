@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import codonpdx.count
 import codonpdx.insert
 import codonpdx.calc
-import json
 
 from codonpdx.celery import app
 
