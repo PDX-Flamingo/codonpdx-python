@@ -58,7 +58,7 @@ class dbManager:
                          (name,))
         return self.cur.fetchone()
 
-    # acuqire all the organisms from a sequence database
+    # generator to get the organisms from a sequence database
     # source: the name of the sequence database (e.g., 'refseq')
     #  This string is used directly in the query and needs to be safe
     # ids: a sequence of ids that are to be retrieved
@@ -79,7 +79,11 @@ class dbManager:
             id_list = "true"
         # actually do the query and return the results
         self.cur.execute("SELECT * FROM "+source+" WHERE "+id_list+";")
-        return self.cur.fetchall()
+        while True:
+            organism = self.cur.fetchone()
+            if not organism:
+                break
+            yield organism
 
     # get a codon <-> acid translation table
     # kind: the name of the table to acquire
