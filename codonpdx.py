@@ -207,6 +207,13 @@ parserClearResults = subparsers.add_parser(
     'clearResults',
     help='clear the results table of data older than a week'
 )
+parserClearResults.add_argument(
+    '-d',
+    '--days',
+    type=int,
+    default=7,
+    help='Number of days to remove, default: 7'
+)
 
 parserClearResults.set_defaults(
     func=codonpdx.clearresults.clear
