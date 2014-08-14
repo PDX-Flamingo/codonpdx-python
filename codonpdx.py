@@ -2,6 +2,7 @@
 
 import argparse
 import codonpdx.calc
+import codonpdx.clearresults
 import codonpdx.count
 import codonpdx.insert
 import codonpdx.mirror
@@ -199,6 +200,16 @@ parserQueueJobs.add_argument(
 
 parserQueueJobs.set_defaults(
     func=codonpdx.queueJobs.queueJobs
+)
+
+# create the queueJobs subcommand
+parserClearResults = subparsers.add_parser(
+    'clearResults',
+    help='clear the results table of data older than a week'
+)
+
+parserClearResults.set_defaults(
+    func=codonpdx.clearresults.clear
 )
 
 args = parser.parse_args()
