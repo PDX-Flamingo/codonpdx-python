@@ -161,3 +161,9 @@ class dbManager:
     # table: name of the table
     def truncateTable(self, table):
         self.cur.execute("TRUNCATE " + table + ";")
+
+    # remove data from results table older than a week
+    def clearResults(self):
+        self.cur.execute(
+            "delete from results where time < now() - interval '1 week';"
+            )
