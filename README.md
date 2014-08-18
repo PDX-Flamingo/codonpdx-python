@@ -66,7 +66,6 @@ load count metadata into refseq
 ```bash
 cat /tmp/complete.1.json | ./codonpdx.py insert -d refseq
 ```
-[Wiki](#)
 
 ### Calc
 
@@ -75,7 +74,7 @@ calculate scores for NG_027788.1
 ```bash
 ./codonpdx.py calc -d refseq -v NG_027788.1
 ```
-[Wiki](#)
+[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/Score-Calculation-Algorithm)
 
 
 Results
