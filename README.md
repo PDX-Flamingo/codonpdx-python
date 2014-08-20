@@ -3,7 +3,11 @@ codonpdx-python
 
 [![Build Status](https://travis-ci.org/PDX-Flamingo/codonpdx-python.svg?branch=master)](https://travis-ci.org/PDX-Flamingo/codonpdx-python)
 
-Python version of the codonpdx counter
+Pythond Backend Celery Tasks
+---
+- Mirroring and Provisioning
+- Codon Counter / Ratio Calculations
+- PostgreSQL Interface
 
 Setup
 -----
@@ -31,30 +35,29 @@ Sample configuration files are provided for the following:
 Usage
 -------
 
-### Mirror
+### Starting a celery worker
 
-Mirror refseq or genbank to local disk.
-
-```bash
-./codonpdx.py mirror -d refseq
-```
-
-### queueJobs
-
-One or more celery workers must be running before running this. This command
-will count codon count data and insert it into to the database.
+This will start a celery worker which is used by the webapp and mirror command.
 
 ```bash
-./codonpdx queueJobs -d {refseq,genbank} -f {fasta,genbank}
+celery -A codonpdx worker -l info
 ```
 
-### Count
+The celery worker can also be [daemonized](http://celery.readthedocs.org/en/latest/tutorials/daemonizing.html).
+
+### Mirroring and Provisioning Metadata
+
+[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/CodonPDX-command-line-usage)
+
+### Codon Count
 
 generate codon count metadata for a file
 
 ```bash
 zcat ~/refseq/release/complete/complete.1.genomic.gbff.gz| ./codonpdx.py count -f genbank > /tmp/complete.1.json
 ```
+
+[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/CounterC)
 
 ### Insert
 
@@ -71,14 +74,8 @@ calculate scores for NG_027788.1
 ```bash
 ./codonpdx.py calc -d refseq -v NG_027788.1
 ```
+[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/Score-Calculation-Algorithm)
 
-### Starting a celery worker
-
-This will start a celery worker which is used by the webapp and mirror command.
-
-```bash
-celery -A codonpdx worker -l info
-```
 
 Results
 --------
