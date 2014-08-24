@@ -9,6 +9,13 @@ Pythond Backend Celery Tasks
 - Codon Counter / Ratio Calculations
 - PostgreSQL Interface
 
+Cloning This Repository
+-----------------------
+
+```bash
+git clone git@github.com:PDX-Flamingo/codonpdx-python.git
+```
+
 Setup
 -----
 
