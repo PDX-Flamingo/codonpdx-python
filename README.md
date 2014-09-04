@@ -54,7 +54,7 @@ The celery worker can also be [daemonized](http://celery.readthedocs.org/en/late
 
 ### Mirroring and Provisioning Metadata
 
-[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/CodonPDX-command-line-usage)
+[Wiki](https://github.com/PDX-Flamingo/codonpdx-python/wiki/Command-Line-Usage)
 
 ### Codon Count
 
