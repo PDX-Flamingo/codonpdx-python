@@ -12,7 +12,7 @@ def insert(args):
         data = json.load(args.infile)
     with dbManager('config/db.cfg') as db:
         for org in data:
-            db.insertOrganism(org, args.dbname, args.job)
+            db.insertOrganism(org, args.dbname)
     return data
 
 
